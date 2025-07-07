@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Utkalika ❤️</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <canvas id="heartCanvas"></canvas>
+  <audio id="bg-music" loop>
+  <source src="assets/lover.mp3" type="audio/mpeg" />
+  </audio>
+  <!-- Landing Page -->
+  <div class="page active" id="landing">
+    <h1 style="animation: bounceIn 1s ease-out;">🎉 It's a Special Day! 🎉</h1>
+    <p style="margin-top:10px;">Tap to unwrap some love 💖</p>
+    <button onclick="nextPage('intro')">Click to Begin</button>
+  </div>
+
+  <!-- Intro Page -->
+  <div class="page" id="intro">
+    <h2>Happy Birthday, Utkalika! 💕</h2>
+    <p>From your little chaos — Rishab</p>
+    <button onclick="nextPage('slideshow')">See Our Moments</button>
+  </div>
+
+<!-- Slideshow Page -->
+<div class="page" id="slideshow">
+  <h2>📸 Our Moments</h2>
+  
+  <div class="slideshow">
+    <div class="slideshow-wrapper">
+      <button class="nav-btn left" onclick="prevSlide()">⬅️</button>
+      
+      <div class="media-container">
+        <img id="slide-img" />
+        <video id="slide-video" controls hidden></video>
+        <p id="slide-caption"></p>
+      </div>
+      
+      <button class="nav-btn right" onclick="nextSlide()">➡️</button>
+    </div>
+  </div>
+  
+  <button onclick="nextPage('loveNotes')">Next Section</button>
+</div>
+
+  <!-- Love Notes Page -->
+<div class="page" id="loveNotes"> 
+  <h2>💌 Love Notes</h2> 
+  <div class="quote-card pink"><p class="quote">"Can I go where you go?"</p> <span class="author">— Lover</span> </div> 
+  <div class="quote-card blue"> <p class="quote">You turned grey skies into ‘Daylight’</p> <span class="author">— Daylight</span> 
+  </div> <div class="quote-card violet"> <p class="quote">You’re the song I didn’t know I was humming all along.</p> <span class="author">— Rishab</span> </div>
+  <button onclick="nextPage('letters')">Read Letters</button>
+</div>
+
+<div class="page" id="letters">
+  <h2>📬 Personal Letters</h2>
+  <div class="letter-container">
+    <div class="envelope" onclick="openLetter('letter1')">
+      <img src="assets/envelope.png" class="envelope-icon" />
+      <div class="click-hint">Click to open 💌</div>
+    </div>
+    <div class="envelope" onclick="openLetter('letter2')">
+      <img src="assets/envelope.png" class="envelope-icon" />
+      <div class="click-hint">Click to open 💌</div>
+    </div>
+    <div class="envelope" onclick="openLetter('letter3')">
+      <img src="assets/envelope.png" class="envelope-icon" />
+      <div class="click-hint">Click to open 💌</div>
+    </div>
+  </div>
+
+  <!-- Pop-up Modals -->
+  <div class="letter-popup" id="letter1">
+    <div class="popup-content">
+      <span class="close" onclick="closeLetter('letter1')">&times;</span>
+      <p><strong>16th February, 2025</strong></p>
+        <p>
+          Lover Fest felt like a dream with you, but the most magical part was our moment — our own little 'Lover' moment.  
+          That tight hug, the warmth, the comfort — it didn’t feel like a first meeting; it felt like home.
+        </p>
+        <p>
+          Everything about you was just perfect — your kindness, your voice, your smile, your eyes — and then you showed up in my favorite color, stealing my heart effortlessly, like a lyric written just for me.
+        </p>
+        <p>
+          If time could pause, I’d choose that moment over and over again.  
+          Thank you so much, Ms. Beauty, for coming into my life!! 💖
+        </p>
+    </div>
+  </div>
+
+  <div class="letter-popup" id="letter2">
+    <div class="popup-content">
+      <span class="close" onclick="closeLetter('letter2')">&times;</span>
+      <p>To Utk, my little secret whispering magic,</p>
+        <p>
+          You walked into my life on a random February day,  
+          but since then, nothing’s felt random at all.
+        </p>
+        <p>
+          You’ve become my calm in chaos,  
+          the smile I search for in the noise,  
+          and the silence that feels full when you're near.
+        </p>
+        <p>
+          In your laughter, I’ve found music.  
+          In your voice, a sense of home.
+        </p>
+        <p>
+          Even our little fights… they carry warmth,  
+          because they end with us understanding each other even more.
+        </p>
+        <p>
+          You've seen me — the raw, messy, unfiltered me.  
+          And yet, you stayed.  
+          That means more to me than words can ever spell out.
+        </p>
+        <p>
+          With you, I’ve felt what it means to be alive.  
+          To be wanted.  
+          To be held — not just in arms, but in heart.
+        </p>
+        <p>
+          So here’s to you —  
+          The one who turned my ordinary into something quietly magical.
+        </p>
+        <p>Happy Birthday, Bebu ❣️</p>
+    </div>
+  </div>
+
+  <div class="letter-popup" id="letter3">
+    <div class="popup-content">
+      <span class="close" onclick="closeLetter('letter3')">&times;</span>
+      <p>
+          You’re chaotic, expressive, loving, annoying, sweet — and everything in between.  
+          You tease, you pout, you comfort, you demand.  
+          You ask for too many kisses and then complain when I give just one.
+        </p>
+        <p>
+          But most of all, you make me feel like I’m *wanted*.  
+          And that’s something rare.
+        </p>
+        <p>
+          From “MS Beauty” to “my safe place,”  
+          you’ve become this rhythm in my everyday life — the voice in my head that sounds like mischief and love.
+        </p>
+        <p>
+          We’re weird. We fight. We vibe.  
+          We forgive. We repeat.  
+          And that loop? Feels like home.
+        </p>
+        <p>
+          I won’t say future, forever, or always.  
+          I’ll just say — *right now*, you’ve made my world softer.  
+          And that’s enough to write a love song about 💛
+        </p>
+    </div>
+  </div>
+
+  <button onclick="nextPage('quiz')">Quiz Time</button>
+</div>
+
+
+
+  <!-- Quiz Page -->
+<div class="page" id="quiz">
+  <h2>💡 Quiz Time! 💡</h2>
+  <div id="quiz-box">
+    <div id="question-card">
+      <p id="question-text"></p>
+      <div id="options"></div>
+    </div>
+    <p id="feedback"></p>
+  </div>
+
+ <div id="quiz-end" style="display:none;">
+  <h3>You scored <span id="final-score"></span>/5 💖</h3>
+  <p id="reward-message"></p>
+  <div id="reward-gift"></div> <!-- ✅ Added gift container -->
+  <button id="claimBtn" onclick="nextPage('surprise-prompt')">🎁 Click to Claim 🎉</button>
+<div id="confetti" class="confetti-container"></div>
+ </div>
+</div>
+
+<!-- Surprise Prompt Page --> 
+ <div class="page" id="surprise-prompt"> 
+  <h2>🎁 Are you ready for the Surprise??</h2> 
+  <div class="surprise-buttons"> 
+    <button class="yes-btn" onclick="loadSurprise()">Yes</button> 
+    <button class="no-btn" onclick="showGlitchPopup()">No</button> 
+  </div> 
+  <p id="loading-text" style="display: none;">✨ Surprise loading... Please wait ✨</p> 
+  
+  <!-- Glitch Popup --> 
+   <div id="glitch-popup" class="glitch-popup"> 
+    <div class="glitch-popup-content"> 
+      <span class="close-glitch" onclick="closeGlitchPopup()">&times;</span> 
+      <p>Oops! Seems like there's a technical glitch here,<br> Please click on the 'Yes' button.</p> 
+    </div> 
+  </div> 
+</div>
+
+
+
+<!-- Digital Surprise Page -->
+<div class="page" id="surprise" style="display: none;">
+  <div class="surprise-layout">
+    <div class="surprise-side">
+      <img src="assets/photo1.jpg" class="surprise-img landscape" onclick="openImageModal(this.src)" />
+      <img src="assets/photo2.jpg" class="surprise-img landscape" onclick="openImageModal(this.src)" />
+      <img src="assets/photo5.jpg" class="surprise-img landscape" onclick="openImageModal(this.src)" />
+    </div>
+
+    <div class="surprise-center">
+      <video id="surprise-video" autoplay muted playsinline controls class="surprise-video">
+        <source src="assets/birthday_surprise.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div class="surprise-buttons-container">
+        <button id="replay-button" onclick="replaySurprise()" class="replay-btn">🔁 Replay Video</button>
+        <button id="nextToAppreciation" onclick="nextPage('appreciation')" class="next-btn">🎈 See What's Next</button>
+      </div>
+    </div>
+
+    <div class="surprise-side">
+      <img src="assets/photo3.jpg" class="surprise-img portrait" onclick="openImageModal(this.src)" />
+      <img src="assets/photo4.jpg" class="surprise-img landscape" onclick="openImageModal(this.src)" />
+      <img src="assets/photo6.jpg" class="surprise-img landscape" onclick="openImageModal(this.src)" />
+    </div>
+  </div>
+</div>
+
+<!-- Appreciation Page --> 
+<div class="page" id="appreciation"> <div class="appreciation-message"> 
+    <h2>🎁 A Thoughtful Gift 🎁</h2> 
+    <p> Thought of making your day special this year with wonderful smiles from these cute little souls. </p> 
+    <p> Every blessing matters... </p> 
+    <p> Hope you like this small token of love from me with the help of <strong>Homeless Care Foundation</strong>. </p> 
+    <p> Not everyone is so privileged like us, so why not make your special day their special day too ♥ </p> 
+    <p> Wishing you a very <strong>Happiest Birthday</strong> from me and these cute brothers and sisters. 🎉 </p> 
+    <h3>#Happiest23birthdayUtk</h3>
+<button onclick="nextPage('goodbye')">💖 Continue</button>
+</div> 
+</div>
+
+  <!-- Final Goodbye Page -->
+  <div class="page" id="goodbye">
+    <h2>Thank You for Being You ✨</h2>
+    <div class="quote-box"> <p class="quote">"long live the memories we made"</p> <p class="author">— Taylor Swift</p> </div>
+    <br>
+    <br>  
+    <div id="wish-section">
+  <h2>Write a Wish to the Universe 💫</h2>
+  <form id="wishForm">
+    <textarea name="wish" placeholder="Type your wish here..." required></textarea><br>
+    <button type="submit">Send to the Universe ✨</button>
+    <p id="wishStatus"></p>
+  </form>
+</div>
+    <p>Made by Rishab(Taylor's Version)</p>
+  </div>
+
+  
+
+  <script src="assets/script.js"></script>
+<!-- Image Modal Popup -->
+<div id="imageModal" class="image-modal">
+  <span class="close-modal" onclick="closeImageModal()">&times;</span>
+  <img class="modal-content" id="modalImage">
+</div>
+
+
+</body>
+</html>
