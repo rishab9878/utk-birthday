@@ -46,7 +46,7 @@ function showSlide(index) {
         video.play();
         video.style.opacity = 1;
       };
-
+   
       clearInterval(autoSlideTimer); // Pause for video
       video.onended = () => {
         setTimeout(() => {
@@ -251,6 +251,7 @@ function claimSurprise() {
     setTimeout(hideSurpriseText, 4000);
   }, 2000);
 }
+
 
 function hideSurpriseText() {
   const text = document.getElementById("celebrate-text");
@@ -529,7 +530,7 @@ loadingText.style.display = "block";
 
 setTimeout(() => {
 nextPage("surprise");
-}, 3500);
+}, 1500);
 }
 
 for (let i = 0; i < 30; i++) {
@@ -593,4 +594,19 @@ document.getElementById("wishForm").addEventListener("submit", function (e) {
       document.getElementById("wishStatus").innerText = "Something went wrong. Try again!";
     });
 });
+ 
 
+/*
+// Secret Letter
+
+function checkSecret() {
+  const password = prompt("Enter the secret password to unlock 💌:");
+
+  if (password === "utklove23") {
+    document.getElementById("secretLetter").style.display = "block";
+    document.body.style.overflow = "hidden"; // prevent background scroll
+  } else if (password !== null) {
+    alert("Oops! Wrong password 💔");
+  }
+}
+*/
