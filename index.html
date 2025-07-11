@@ -228,45 +228,63 @@
   </div>
 </div>
 
-
-
-
-<!-- Digital Surprise Page -->
-<!-- Digital Surprise Page -->
-<!-- 🌟 Surprise Gallery Page -->
+<!-- 🌈 Restructured Surprise Page (Same Theme) -->
 <div class="page" id="surprise">
-  <div class="surprise-wrapper">
-    <h2 class="section-title">🎉 A Special Surprise Just for You 🎉</h2>
-    <p class="surprise-subtext">Swipe through these memories and play the video when you're ready 💖</p>
+  <!-- Header Section -->
+  <div class="surprise-header">
+    <h2>🎁 Your Surprise Awaits!</h2>
+    <p class="subtext">"You're my, my, my, my lover..."</p>
+  </div>
 
-    <!-- 📸 Photo Gallery -->
-    <div class="surprise-gallery">
-      <div class="surprise-photo-grid">
-        <img src="assets/photo1.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
-        <img src="assets/photo2.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
-        <img src="assets/photo3.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
-        <img src="assets/photo4.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
-        <img src="assets/photo5.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
-        <img src="assets/photo6.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
+  <!-- Media Grid Layout -->
+  <div class="surprise-grid">
+    <!-- Left Column - Photos -->
+    <div class="photo-column">
+      <div class="photo-frame" onclick="openImageModal('assets/photo1.jpg')">
+        <img src="assets/photo1.jpg" alt="Our moment">
+      </div>
+      <div class="photo-frame" onclick="openImageModal('assets/photo2.jpg')">
+        <img src="assets/photo2.jpg" alt="Together">
       </div>
     </div>
 
-    <!-- 🎥 Video Box -->
-    <div class="surprise-video-box">
-      <video id="surprise-video" autoplay muted playsinline controls>
-        <source src="assets/birthday_surprise.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+    <!-- Center Column - Video -->
+    <div class="video-column">
+      <div class="video-wrapper">
+        <video id="surprise-video" controls playsinline>
+          <source src="assets/birthday_surprise.mp4" type="video/mp4">
+        </video>
+        <div class="play-hint">
+          <span>💖 Click to play</span>
+        </div>
+      </div>
     </div>
 
-    <!-- 🎈 Action Buttons -->
-    <div class="surprise-buttons-container">
-      <button id="replay-button" onclick="replaySurprise()" class="replay-btn">🔁 Replay</button>
-      <button id="nextToAppreciation" onclick="nextPage('appreciation')" class="next-btn">🎈 See What's Next</button>
+    <!-- Right Column - Photos -->
+    <div class="photo-column">
+      <div class="photo-frame" onclick="openImageModal('assets/photo3.jpg')">
+        <img src="assets/photo3.jpg" alt="Memories">
+      </div>
+      <div class="photo-frame" onclick="openImageModal('assets/photo4.jpg')">
+        <img src="assets/photo4.jpg" alt="Us">
+      </div>
     </div>
   </div>
-</div>
 
+  <!-- Action Buttons -->
+  <div class="surprise-actions">
+    <button onclick="replayVideo()" class="lover-btn">
+      <span>🔄 Replay</span>
+    </button>
+    <button onclick="nextPage('appreciation')" class="lover-btn">
+      <span>Continue 💫</span>
+    </button>
+  </div>
+
+  <!-- Floating Elements -->
+  <div class="floating-hearts"></div>
+  <div class="floating-lyrics">"Can I go where you go?"</div>
+</div>
 
 <!-- Appreciation Page --> 
 <div class="page" id="appreciation"> <div class="appreciation-message"> 
@@ -288,7 +306,7 @@
     <br>
     <br>  
     <div id="wish-section">
-  <h2>Write a Wish to the Universe 💫</h2>
+  <h2>Write a Wish/message to the Universe 💫</h2>
   <form id="wishForm">
     <textarea name="wish" placeholder="Type your wish here..." required></textarea><br>
     <button type="submit">Send to the Universe ✨</button>
@@ -300,7 +318,7 @@
     <p>- Rishab (Taylor's Version)</p>
 
 <!-- Secret Letter Popup 
- <button onclick="checkSecret()">🔒 Secret Message</button>
+ <button onclick="checkSecret()">Don't Click here if you're gonna cry</button>
 <div class="letter-popup" id="secretLetter">
   <div class="popup-content">
     <span class="close" onclick="closeLetter('secretLetter')">&times;</span>
