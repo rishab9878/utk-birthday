@@ -181,64 +181,77 @@
 
 
 
-  <!-- Quiz Page -->
+<!-- 💡 Modern Quiz Page -->
 <div class="page" id="quiz">
-  <h2>💡 Quiz Time! 💡</h2>
-  <div id="quiz-box">
-    <div id="question-card">
-      <p id="question-text"></p>
-      <div id="options"></div>
-    </div>
-    <p id="feedback"></p>
-  </div>
+  <div class="quiz-card glass">
+    <h2 class="section-title">💡 Quiz Time! 💡</h2>
 
- <div id="quiz-end" style="display:none;">
-  <h3>You scored <span id="final-score"></span>/5 💖</h3>
-  <p id="reward-message"></p>
-  <div id="reward-gift"></div> <!-- ✅ Added gift container -->
-  <button id="claimBtn" onclick="nextPage('surprise-prompt')">🎁 Click to Claim 🎉</button>
-<div id="confetti" class="confetti-container"></div>
- </div>
+    <!-- Question Area -->
+    <div id="quiz-box" class="quiz-box">
+      <p id="question-text" class="quiz-question"></p>
+      <div id="options" class="quiz-options"></div>
+      <p id="feedback" class="quiz-feedback"></p>
+    </div>
+
+    <!-- Final Score + Reward -->
+    <div id="quiz-end" class="quiz-end" style="display:none;">
+      <h3 class="score-title">You scored <span id="final-score"></span>/5 💖</h3>
+      <p id="reward-message" class="reward-message"></p>
+      <div id="reward-gift" class="reward-gift"></div>
+      <button id="claimBtn" onclick="nextPage('surprise-prompt')" class="primary-btn">🎁 Click to Claim 🎉</button>
+      <div id="confetti" class="confetti-container"></div>
+    </div>
+  </div>
 </div>
+
 
 <!-- Surprise Prompt Page --> 
- <div class="page" id="surprise-prompt"> 
-  <h2>🎁 Are you ready for the Surprise??</h2> 
-  <div class="surprise-buttons"> 
-    <button class="yes-btn" onclick="loadSurprise()">Yes</button> 
-    <button class="no-btn" onclick="showGlitchPopup()">No</button> 
-  </div> 
-  <p id="loading-text" style="display: none;">✨ Surprise loading... Please wait ✨</p> 
-  
-  <!-- Glitch Popup --> 
-   <div id="glitch-popup" class="glitch-popup"> 
-    <div class="glitch-popup-content"> 
-      <span class="close-glitch" onclick="closeGlitchPopup()">&times;</span> 
-      <p>Oops! Seems like there's a technical glitch here,<br> Please click on the 'Yes' button.</p> 
-    </div> 
-  </div> 
+ <!-- 🎁 Redesigned Surprise Prompt Page -->
+<div class="page" id="surprise-prompt">
+  <div class="surprise-card glass">
+    <h2 class="section-title">🎁 Are you ready for a Surprise??</h2>
+
+    <div class="surprise-buttons">
+      <button class="yes-btn" onclick="loadSurprise()">Yes</button>
+      <button class="no-btn" onclick="showGlitchPopup()">No</button>
+    </div>
+
+    <p id="loading-text" class="loading-text" style="display: none;">✨ Surprise loading... Please wait ✨</p>
+  </div>
+
+  <!-- Glitch Popup -->
+  <div id="glitch-popup" class="glitch-popup">
+    <div class="glitch-popup-content">
+      <span class="close-glitch" onclick="closeGlitchPopup()">&times;</span>
+      <p>Oops! Seems like there's a technical glitch here,<br> Please click on the 'Yes' button.</p>
+    </div>
+  </div>
 </div>
 
 
 
+
 <!-- Digital Surprise Page -->
 <!-- Digital Surprise Page -->
-<div class="page" id="surprise" style="display: none;">
+<!-- 🌟 Surprise Gallery Page -->
+<div class="page" id="surprise">
   <div class="surprise-wrapper">
-    <h2 class="surprise-title">🎉 A Special Surprise Just for You 🎉</h2>
+    <h2 class="section-title">🎉 A Special Surprise Just for You 🎉</h2>
     <p class="surprise-subtext">Swipe through these memories and play the video when you're ready 💖</p>
 
+    <!-- 📸 Photo Gallery -->
     <div class="surprise-gallery">
       <div class="surprise-photo-grid">
-        <img src="assets/photo1.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
-        <img src="assets/photo2.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
-        <img src="assets/photo3.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
-        <img src="assets/photo4.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
-        <img src="assets/photo5.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
-        <img src="assets/photo6.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
+        <img src="assets/photo1.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
+        <img src="assets/photo2.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
+        <img src="assets/photo3.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
+        <img src="assets/photo4.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
+        <img src="assets/photo5.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
+        <img src="assets/photo6.jpg" class="surprise-photo" onclick="openImageModal(this.src)" />
       </div>
     </div>
 
+    <!-- 🎥 Video Box -->
     <div class="surprise-video-box">
       <video id="surprise-video" autoplay muted playsinline controls>
         <source src="assets/birthday_surprise.mp4" type="video/mp4" />
@@ -246,6 +259,7 @@
       </video>
     </div>
 
+    <!-- 🎈 Action Buttons -->
     <div class="surprise-buttons-container">
       <button id="replay-button" onclick="replaySurprise()" class="replay-btn">🔁 Replay</button>
       <button id="nextToAppreciation" onclick="nextPage('appreciation')" class="next-btn">🎈 See What's Next</button>
@@ -307,6 +321,8 @@
 </div>  -->
 
   </div>
+
+  
 
   <script src="assets/script.js"></script>
 <!-- Image Modal Popup -->
