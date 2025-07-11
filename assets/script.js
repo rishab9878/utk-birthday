@@ -43,18 +43,24 @@ function showSlide(index) {
       video.loop = false;
 
       video.oncanplay = () => {
-        video.play();
-        video.style.opacity = 1;
-      };
+      setTimeout(() => {
+      video.play();
+      video.style.opacity = 1;
+      }, 100);
+    };
    
       clearInterval(autoSlideTimer); // Pause for video
       video.onended = () => {
-        setTimeout(() => {
-          currentSlide = (currentSlide + 1) % slides.length;
-          showSlide(currentSlide);
-          startAutoSlide();
-        }, 500);
-      };
+      const audio = document.getElementById("bg-music");
+      if (audio && audio.paused) audio.play();
+
+      setTimeout(() => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+      startAutoSlide();
+      }, 500);
+    };
+
     }
   }, 100);
 }
@@ -116,6 +122,12 @@ function nextPage(id) {
   if (audio && audio.paused) {
     audio.play().catch(e => console.warn("Autoplay blocked", e));
   }
+
+  // Highlight timeline step
+document.querySelectorAll(".timeline-step").forEach(step => step.classList.remove("active"));
+const timelineStep = document.getElementById(`step-${id}`);
+if (timelineStep) timelineStep.classList.add("active");
+
 }
 
 // ------------------------ QUIZ FUNCTIONALITY ------------------------
@@ -190,7 +202,7 @@ function checkAnswer(button, correctAnswer) {
     } else {
       showQuizEnd();
     }
-  }, 800);
+  }, 500);
 }
 
 function showQuizEnd() {
