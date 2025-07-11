@@ -622,3 +622,85 @@ function checkSecret() {
   }
 }
 */
+
+
+// 🎥 Video Player Logic
+function initVideo() {
+  const video = document.getElementById('surprise-video');
+  const playHint = document.querySelector('.play-hint');
+  
+  video.addEventListener('play', function() {
+    video.classList.add('show');
+    // Create hearts when playing
+    setInterval(() => createHeartParticle(video), 500);
+  });
+  
+  
+  // Heart particles when video plays
+  video.addEventListener('play', () => {
+    setInterval(() => {
+      createHeartParticle(video.getBoundingClientRect().left + 150, 
+                         video.getBoundingClientRect().top + 100);
+    }, 300);
+  });
+}
+
+// ❤️ Heart Particles
+function createHeartParticle(x, y) {
+  const heart = document.createElement('div');
+  heart.innerHTML = '❤️';
+  heart.style.position = 'absolute';
+  heart.style.left = `${x}px`;
+  heart.style.top = `${y}px`;
+  heart.style.fontSize = `${Math.random() * 20 + 10}px`;
+  heart.style.opacity = Math.random() * 0.5 + 0.5;
+  heart.style.animation = `floatHeart ${Math.random() * 3 + 2}s linear forwards`;
+  
+  document.querySelector('.hearts').appendChild(heart);
+  
+  setTimeout(() => {
+    heart.remove();
+  }, 2000);
+}
+
+// Add to your existing nextPage() function:
+if (id === "surprise") {
+  setTimeout(() => {
+    initVideo();
+    // Start floating lyrics animation
+    const lyrics = document.querySelector('.floating-lyrics');
+    setInterval(() => {
+      const lines = [
+        "\"You're my, my, my, my... Lover\"",
+        "\"Can I go where you go?\"",
+        "\"Have I known you 20 seconds or 20 years?\"",
+        "\"I love you, ain't that the worst thing you ever heard?\""
+      ];
+      lyrics.textContent = lines[Math.floor(Math.random() * lines.length)];
+      lyrics.style.animation = 'none';
+      void lyrics.offsetWidth; // Trigger reflow
+      lyrics.style.animation = 'floatUp 3s infinite alternate';
+    }, 5000);
+  }, 100);
+}
+
+// 🎥 Fixed Replay Function 
+function replayVideo() {
+  const video = document.getElementById('surprise-video');
+  
+  // Reset and play
+  video.currentTime = 0;
+  video.play().catch(e => console.log("Auto-play prevented:", e));
+  
+  // Visual feedback
+  const btn = document.querySelector('[onclick="replayVideo()"]');
+  btn.innerHTML = '<span>🎀 Playing...</span>';
+  
+  setTimeout(() => {
+    btn.innerHTML = '<span>🔄 Replay</span>';
+  }, 1500);
+  
+  // Restart heart particles if needed
+  if (window.heartInterval) clearInterval(window.heartInterval);
+  window.heartInterval = setInterval(() => createHeartParticle(video), 300);
+}
