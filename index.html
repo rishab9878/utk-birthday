@@ -9,6 +9,21 @@
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
+
+<!-- Timeline Progress Bar -->
+<div id="timeline">
+  <div class="timeline-step" id="step-intro">💖 Intro</div>
+  <div class="timeline-step" id="step-slideshow">📸 Moments</div>
+  <div class="timeline-step" id="step-loveNotes">💌 Notes</div>
+  <div class="timeline-step" id="step-letters">📬 Letters</div>
+  <div class="timeline-step" id="step-quiz">💡 Quiz</div>
+  <div class="timeline-step" id="step-surprise">🎁 Surprise</div>
+  <div class="timeline-step" id="step-appreciation">🎉 Appreciation</div>
+  <div class="timeline-step" id="step-goodbye">🌟 Goodbye</div>
+</div>
+
+
+
   <canvas id="heartCanvas"></canvas>
   <audio id="bg-music" loop>
   <source src="assets/lover.mp3" type="audio/mpeg" />
@@ -207,32 +222,37 @@
 
 
 <!-- Digital Surprise Page -->
+<!-- Digital Surprise Page -->
 <div class="page" id="surprise" style="display: none;">
-  <div class="surprise-layout">
-    <div class="surprise-side">
-      <img src="assets/photo1.jpg" loading="lazy" class="surprise-img landscape" onclick="openImageModal(this.src)" />
-      <img src="assets/photo2.jpg" loading="lazy" class="surprise-img landscape" onclick="openImageModal(this.src)" />
-      <img src="assets/photo5.jpg" loading="lazy" class="surprise-img landscape" onclick="openImageModal(this.src)" />
-    </div>
+  <div class="surprise-wrapper">
+    <h2 class="surprise-title">🎉 A Special Surprise Just for You 🎉</h2>
+    <p class="surprise-subtext">Swipe through these memories and play the video when you're ready 💖</p>
 
-    <div class="surprise-center">
-      <video id="surprise-video" autoplay muted playsinline controls class="surprise-video">
-        <source src="assets/birthday_surprise.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      <div class="surprise-buttons-container">
-        <button id="replay-button" onclick="replaySurprise()" class="replay-btn">🔁 Replay Video</button>
-        <button id="nextToAppreciation" onclick="nextPage('appreciation')" class="next-btn">🎈 See What's Next</button>
+    <div class="surprise-gallery">
+      <div class="surprise-photo-grid">
+        <img src="assets/photo1.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
+        <img src="assets/photo2.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
+        <img src="assets/photo3.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
+        <img src="assets/photo4.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
+        <img src="assets/photo5.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
+        <img src="assets/photo6.jpg" class="surprise-photo" onclick="openImageModal(this.src)" loading="lazy" />
       </div>
     </div>
 
-    <div class="surprise-side">
-      <img src="assets/photo3.jpg" loading="lazy" class="surprise-img portrait" onclick="openImageModal(this.src)" />
-      <img src="assets/photo4.jpg"  loading="lazy"class="surprise-img landscape" onclick="openImageModal(this.src)" />
-      <img src="assets/photo6.jpg" loading="lazy" class="surprise-img landscape" onclick="openImageModal(this.src)" />
+    <div class="surprise-video-box">
+      <video id="surprise-video" autoplay muted playsinline controls>
+        <source src="assets/birthday_surprise.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div class="surprise-buttons-container">
+      <button id="replay-button" onclick="replaySurprise()" class="replay-btn">🔁 Replay</button>
+      <button id="nextToAppreciation" onclick="nextPage('appreciation')" class="next-btn">🎈 See What's Next</button>
     </div>
   </div>
 </div>
+
 
 <!-- Appreciation Page --> 
 <div class="page" id="appreciation"> <div class="appreciation-message"> 
