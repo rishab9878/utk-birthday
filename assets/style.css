@@ -1751,3 +1751,289 @@ h1, h2, h3 {
   background: linear-gradient(135deg, #f06292, #e55a8b);
   transform: translateY(-2px);
 }
+
+
+
+/* 🌸 Lover Theme Base */
+#surprise {
+  background: linear-gradient(135deg, #ffdde1, #fcedf2, #f3d9fa, #d0c3f1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ☁️ Floating Clouds */
+.cloud {
+  position: absolute;
+  background: white;
+  opacity: 0.7;
+  border-radius: 50%;
+  animation: floatCloud 15s infinite linear;
+}
+.cloud-1 { width: 120px; height: 40px; top: 15%; left: -10%; }
+.cloud-2 { width: 180px; height: 60px; top: 25%; right: -15%; }
+.cloud-3 { width: 100px; height: 30px; bottom: 20%; left: 30%; }
+
+@keyframes floatCloud {
+  0% { transform: translateX(-100px); }
+  100% { transform: translateX(calc(100vw + 100px)); }
+}
+
+/* 🏡 Lover House */
+.lover-house {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+.house { height: 150px; filter: drop-shadow(0 0 10px rgba(255,182,193,0.6)); }
+.smoke {
+  position: absolute;
+  width: 30px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: smokeRise 4s infinite ease-out;
+}
+
+/* 📸 Polaroid Grid */
+.polaroid-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 40px 0;
+  flex-wrap: wrap;
+}
+.polaroid {
+  background: white;
+  padding: 15px 15px 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.05) !important;
+}
+.polaroid img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  cursor: pointer;
+}
+.polaroid p {
+  font-family: 'American Typewriter', serif;
+  text-align: center;
+  margin-top: 10px;
+  color: #5a294c;
+}
+
+/* 💌 Typography */
+.lover-title {
+  font-family: 'Satisfy', cursive;
+  font-size: 3rem;
+  color: #e25594;
+  text-shadow: 0 0 10px rgba(255,182,193,0.5);
+  margin-bottom: 0;
+}
+.utk {
+  color: #d63384;
+  text-decoration: underline wavy;
+}
+.lover-subtitle {
+  font-style: italic;
+  color: #5a294c;
+  margin-top: 5px;
+}
+
+/* 🔒 Video Box */
+.video-message {
+  margin: 30px 0;
+  position: relative;
+}
+.heart-lock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 2;
+  background: rgba(255,255,255,0.8);
+  padding: 10px 20px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+.heart-lock:hover {
+  background: white;
+}
+#lover-video {
+  width: 300px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(230,85,148,0.3);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+#lover-video.show {
+  opacity: 1;
+}
+
+/* 🎶 Floating Lyrics */
+.floating-lyrics {
+  font-family: 'Satisfy', cursive;
+  font-size: 1.5rem;
+  color: #ff6184;
+  margin: 20px 0;
+  animation: floatUp 3s infinite alternate;
+}
+
+/* 💖 Buttons */
+.lover-btn {
+  background: linear-gradient(45deg, #ff9aa2, #ffb6b9);
+  border: none;
+  color: white;
+  padding: 12px 25px;
+  margin: 0 10px;
+  border-radius: 50px;
+  font-family: 'Satisfy', cursive;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255,105,180,0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.lover-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255,105,180,0.4);
+}
+.lover-btn span {
+  position: relative;
+  z-index: 1;
+}
+.lover-btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: all 0.5s ease;
+}
+.lover-btn:hover:before {
+  left: 100%;
+}
+
+/* ❤️ Floating Hearts */
+.hearts {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* SURPRISE PAGE STRUCTURE */
+.surprise-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.surprise-header h2 {
+  font-family: 'Satisfy', cursive;
+  color: #e25594;
+  font-size: 2.5rem;
+  margin-bottom: 5px;
+}
+.surprise-header .subtext {
+  font-style: italic;
+  color: #5a294c;
+}
+
+/* GRID LAYOUT */
+.surprise-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.photo-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 30%;
+}
+
+.video-column {
+  width: 40%;
+  display: flex;
+  align-items: center;
+}
+
+/* PHOTO FRAMES */
+.photo-frame {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(255,105,180,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.photo-frame:hover {
+  transform: translateY(-5px) rotate(1deg);
+  box-shadow: 0 8px 20px rgba(255,105,180,0.3);
+}
+.photo-frame img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.photo-caption {
+  font-family: 'Georgia', serif;
+  text-align: center;
+  margin-top: 8px;
+  color: #5a294c;
+  font-size: 14px;
+}
+
+/* VIDEO PLAYER */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(230,85,148,0.3);
+}
+#surprise-video {
+  width: 100%;
+  display: block;
+}
+.play-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.8);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-family: 'Satisfy', cursive;
+  color: #e25594;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+#surprise-video.show ~ .play-hint {
+  opacity: 0;
+}
+
+/* BUTTONS */
+.surprise-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
