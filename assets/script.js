@@ -96,6 +96,12 @@ function nextPage(id) {
     p.style.display = "none"; // hide all
   });
 
+
+  const surpriseVideo = document.getElementById("surprise-video");
+  if (surpriseVideo) {
+    surpriseVideo.pause();
+  }
+
   const next = document.getElementById(id);
   if (next) {
     next.style.display = "block"; // show target
@@ -116,6 +122,14 @@ function nextPage(id) {
       initSurpriseAnimations();
       createFloatingParticles();
     }, 100);
+  }
+
+  if (id === "goodbye") {
+    // Auto-open chatbot on goodbye page load
+    setTimeout(() => {
+      document.getElementById('chatbot').style.display = 'flex';
+      displayBotMessages();
+    }, 1500);
   }
 
   const audio = document.getElementById("bg-music");
@@ -415,6 +429,8 @@ function closeImageModal() {
   }, 300);
 }
 
+let waitingForRishabMessage = false; // State variable for chatbot
+
 // Enhanced surprise page animations
 function initSurpriseAnimations() {
   const surpriseImages = document.querySelectorAll('.surprise-img');
@@ -536,6 +552,76 @@ function closeGlitchPopup() {
   if (popup) popup.style.display = "none";
 }
 
+// ------------------------ CHATBOT FUNCTIONS ------------------------
+function toggleChat() {
+  const chatbot = document.getElementById('chatbot');
+  chatbot.style.display = chatbot.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function displayBotMessages() {
+  const messages = [
+    "Heyy Utk! It's me Taylor",
+    "Hope you loved this little surprise! But guess what? This isn't the end",
+    "A Super cute gift hamper tailored especially for you is already on its way to your address",
+    "Tracking ID: <span style='color:#ff87ab;font-weight:600'>TN123456789</span>", // Themed color
+    "Courier partner: <span style='color:#ff87ab;font-weight:600'>Delhivery</span>", // Themed color
+    "So... what did you think of this web surprise Rishab made for you?"
+  ];
+
+  const chatMessages = document.getElementById('chat-messages');
+  
+  messages.forEach((msg, index) => {
+    setTimeout(() => {
+      // Show typing indicator
+      const typingIndicator = createTypingIndicator();
+      chatMessages.appendChild(typingIndicator);
+      
+      setTimeout(() => {
+        // Remove typing indicator
+        chatMessages.removeChild(typingIndicator);
+        
+        // Add the message
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', 'bot-message');
+        messageElement.innerHTML = msg;
+        chatMessages.appendChild(messageElement);
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 1500);
+    }, index * 2500);
+  });
+}
+
+function createTypingIndicator() {
+  const div = document.createElement('div');
+  div.classList.add('typing-indicator');
+  div.innerHTML = '<span></span><span></span><span></span>';
+  return div;
+}
+
+function sendMessage() {
+  const userInput = document.getElementById('user-input');
+  const message = userInput.value.trim();
+  
+  if (message === '') return;
+
+  // Add user message
+  addMessage(message, 'user');
+  userInput.value = '';
+  
+  // Process and respond
+  setTimeout(() => {
+    respondToUser(message);
+  }, 1000);
+}
+
+function handleKeyPress(event) {
+  if (event.key === 'Enter') {
+    sendMessage();
+  }
+}
+
 function loadSurprise() {
 const loadingText = document.getElementById("loading-text");
 loadingText.style.display = "block";
@@ -586,7 +672,6 @@ function updateLoveMeter(progress) {
   const fill = document.getElementById('heart-fill');
   fill.style.width = progress + '%';
 }
-
 
 document.getElementById("wishForm").addEventListener("submit", function (e) {
   e.preventDefault();
@@ -703,4 +788,64 @@ function replayVideo() {
   // Restart heart particles if needed
   if (window.heartInterval) clearInterval(window.heartInterval);
   window.heartInterval = setInterval(() => createHeartParticle(video), 300);
+}
+
+function addMessage(text, sender) {
+  const chatMessages = document.getElementById('chat-messages');
+  
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message', sender + '-message');
+  messageElement.textContent = text;
+  
+  chatMessages.appendChild(messageElement);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function respondToUser(message) {
+  const chatMessages = document.getElementById('chat-messages');
+  
+  // Show typing indicator
+  const typingIndicator = createTypingIndicator();
+  chatMessages.appendChild(typingIndicator);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+  setTimeout(() => {
+    // Remove typing indicator
+    chatMessages.removeChild(typingIndicator);
+    
+    // Generate response
+    let response;
+    const lowerMessage = message.toLowerCase();
+    
+    if (waitingForRishabMessage) {
+      const rishabResponses = [
+        `Aww, that's so sweet! 💖 I'll make sure Rishab sees your message: "${message}"`,
+        `Your words are going to make Rishab's day! ✨ Here's what you said: "${message}"`,
+        `What a beautiful message! 🥹 I recorded this for Rishab: "${message}"`,
+        `Rishab will be so touched reading this! 💕 Your message: "${message}"`
+      ];
+      response = rishabResponses[Math.floor(Math.random() * rishabResponses.length)];
+      waitingForRishabMessage = false;
+    }
+    else if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
+      response = "You're very welcome! I'm so glad you liked it! ❤️";
+    } 
+    else if (lowerMessage.includes('love') || lowerMessage.includes('amazing') || lowerMessage.includes('awesome')) {
+      response = "Yay! That makes me so happy to hear! Rishab will treasure this feedback forever. Would you like to add a personal message for him?";
+      waitingForRishabMessage = true;
+    }
+    else if (lowerMessage.includes('track') || lowerMessage.includes('delivery') || lowerMessage.includes('address')) {
+      response = "Your gift left our facility yesterday. Should arrive within 3-5 business days!";
+    }
+    else if (lowerMessage.includes('rishab') || lowerMessage.includes('creator') || lowerMessage.includes('made')) {
+      response = "Rishab put his heart into every detail of this surprise! 💝 I know he'd love to hear your thoughts - would you like to send him a personal message?";
+      waitingForRishabMessage = true;
+    }
+    else {
+      response = "Your words mean so much! 💌 Would you like me to pass along a special message to Rishab about how this made you feel?";
+      waitingForRishabMessage = true;
+    }
+    
+    addMessage(response, 'bot');
+  }, 1500);
 }
