@@ -1,3 +1,21 @@
+let isInLetsRemember = false;
+let letsRememberStep = 0;
+let memoryAnswers = [];
+
+const letsRememberFlow = [
+  "💞 February 16th — the first moment you saw him. What were you thinking?",
+  "✨ That pink outfit… remember how he melted? What did he say to you?",
+  "🎬 What was the first thing you said that made him laugh?",
+  "🌅 That Sholay bike ride — what song was playing in your head?",
+  "He'll smile reading all this. 💌 Want to send a final message to him?",
+  "Delivering your memories with sparkles and heartbeats 💖 Thanks for playing *Let's Remember*!"
+];
+
+
+
+
+
+
 // ------------------------ SLIDESHOW LOGIC ------------------------
 
 let currentSlide = 0;
@@ -603,6 +621,32 @@ function createTypingIndicator() {
 function sendMessage() {
   const userInput = document.getElementById('user-input');
   const message = userInput.value.trim();
+  document.getElementById('user-input').value = '';
+  // 🎮 Check if currently in Let's Remember game
+if (isInLetsRemember) {
+  // Show user's reply in the chat
+  addMessage(message, 'user');
+
+  // Store answer
+  memoryAnswers.push(message);
+  letsRememberStep++;
+
+  // Show next question or end the game
+  if (letsRememberStep < letsRememberFlow.length) {
+    setTimeout(() => {
+      addMessage(letsRememberFlow[letsRememberStep], 'bot');
+    }, 1000);
+  } else {
+    isInLetsRemember = false;
+    setTimeout(() => {
+      addMessage("Your memories have been saved with sparkles ✨", 'bot');
+      console.log("Memory game answers:", memoryAnswers);
+    }, 1000);
+  }
+
+  return; // Stop further checks
+}
+
   
   if (message === '') return;
 
@@ -818,20 +862,43 @@ function respondToUser(message) {
     const lowerMessage = message.toLowerCase();
     
     if (waitingForRishabMessage) {
-      const rishabResponses = [
-        `Aww, that's so sweet! 💖 I'll make sure Rishab sees your message: "${message}"`,
-        `Your words are going to make Rishab's day! ✨ Here's what you said: "${message}"`,
-        `What a beautiful message! 🥹 I recorded this for Rishab: "${message}"`,
-        `Rishab will be so touched reading this! 💕 Your message: "${message}"`
-      ];
-      response = rishabResponses[Math.floor(Math.random() * rishabResponses.length)];
-      waitingForRishabMessage = false;
-    }
+  const rishabResponses = [
+    `Aww, that's so sweet! 💖 I'll make sure Rishab sees your message: "${message}"`,
+    `Your words are going to make Rishab’s day! ✨ Here's what you said: "${message}"`,
+    `What a beautiful message! 🥺 I recorded this for Rishab: "${message}"`,
+    `Rishab will be so touched reading this! 💕 Your message: "${message}"`
+  ];
+  response = rishabResponses[Math.floor(Math.random() * rishabResponses.length)];
+  waitingForRishabMessage = false;
+
+  // Add your thank-you + invite to play "Let's Remember"
+  setTimeout(() => {
+    addMessage(response, 'bot');
+
+    // Thank you message
+    setTimeout(() => {
+      addMessage("Before we wrap this up... wanna play something sweet? 💭 It’s called *Let's Remember* — where you finish our memories!", 'bot');
+
+      // Start the memory game
+      isInLetsRemember = true;
+      letsRememberStep = 0;
+      memoryAnswers = [];
+
+      setTimeout(() => {
+        addMessage(letsRememberFlow[letsRememberStep], 'bot');
+      }, 1500);
+    }, 1500);
+
+  }, 100); // initial bot response delay
+
+  return;
+}
+
     else if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
       response = "You're very welcome! I'm so glad you liked it! ❤️";
     } 
     else if (lowerMessage.includes('love') || lowerMessage.includes('amazing') || lowerMessage.includes('awesome')) {
-      response = "Yay! That makes me so happy to hear! Rishab will treasure this feedback forever. Would you like to add a personal message for him?";
+      response = "Yay! That makes me so happy to hear! Rishab put his heart into every detail of this surprise! 💝. Would you like to add a personal message for him?";
       waitingForRishabMessage = true;
     }
     else if (lowerMessage.includes('track') || lowerMessage.includes('delivery') || lowerMessage.includes('address')) {
