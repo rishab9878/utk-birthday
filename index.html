@@ -43,24 +43,43 @@
   </div>
 
 <!-- Slideshow Page -->
+<!-- 📸 Moments Page - Redesigned -->
 <div class="page" id="slideshow">
-  <h2>📸 Our Moments</h2>
-  
-  <div class="slideshow">
-    <div class="slideshow-wrapper">
-      <button class="nav-btn left" onclick="prevSlide()">⬅️</button>
-      
-      <div class="media-container">
-        <img id="slide-img" />
-        <video id="slide-video" controls hidden></video>
-        <p id="slide-caption"></p>
+  <div class="moments-container">
+    <h2>Our Timeless Moments <span class="heart-divider">💖</span></h2>
+    <p class="subtitle">Swipe through our precious memories</p>
+    
+    <div class="polaroid-slideshow">
+      <div class="slideshow-controls">
+        <button class="nav-btn heart-btn left" onclick="prevSlide()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="media-frame">
+          <div class="polaroid">
+            <div class="polaroid-inner">
+              <img id="slide-img" class="moment-photo" />
+              <video id="slide-video" class="moment-video" controls hidden></video>
+              <div class="polaroid-tape"></div>
+            </div>
+            <p id="slide-caption" class="polaroid-caption"></p>
+          </div>
+        </div>
+        
+        <button class="nav-btn heart-btn right" onclick="nextSlide()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
       
-      <button class="nav-btn right" onclick="nextSlide()">➡️</button>
+      <div class="slideshow-progress">
+        <div class="progress-dots"></div>
+      </div>
     </div>
   </div>
   
-  <button onclick="nextPage('loveNotes')">Next Section</button>
+  <button class="next-section-btn" onclick="nextPage('loveNotes')">
+    Continue to Love Notes <i class="fas fa-arrow-right"></i>
+  </button>
 </div>
 
   <!-- Love Notes Page -->
@@ -306,7 +325,7 @@
     <br>
     <br>  
     <div id="wish-section">
-  <h2>Write a Wish/message to the Universe 💫</h2>
+  <h2>Your Wish/message to the Universe 💫</h2>
   <form id="wishForm">
     <textarea name="wish" placeholder="Type your wish here..." required></textarea><br>
     <button type="submit">Send to the Universe ✨</button>
