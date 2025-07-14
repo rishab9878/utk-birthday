@@ -11,9 +11,9 @@ const letsRememberFlow = [
   "Delivering your memories with sparkles and heartbeats 💖 Thanks for playing *Let's Remember*!"
 ];
 
-
-
-
+// --- NEW: Google Apps Script Web App URL ---
+// IMPORTANT: Replace 'YOUR_DEPLOYED_WEB_APP_URL_HERE' with the actual URL you got after deploying your Apps Script.
+const WEB_APP_URL = 'YOUR_DEPLOYED_WEB_APP_URL_HERE';
 
 
 // ------------------------ SLIDESHOW LOGIC ------------------------
@@ -25,7 +25,7 @@ const slides = [
   { type: "photo", src: "media/photo1.jpg", caption: "This is where our story began." },
   { type: "photo", src: "media/photo2.jpg", caption: "Laughs like these stay forever." },
   { type: "photo", src: "media/photo3.jpg", caption: "Your eyes had me stuck in a loop." },
-  { type: "photo", src: "media/photo4.jpg", caption: "Pink skies and you." },
+  { type: "photo", src: "media/photo4.jpg", caption: "Wrapped in golden light - each other!" },
   { type: "photo", src: "media/photo5.jpg", caption: "Could look at you forever." },
   { type: "video", src: "media/video1.mp4", caption: "Remember this moment?" },
   { type: "video", src: "media/video2.mp4", caption: "My chaos, my calm." },
@@ -40,48 +40,52 @@ function showSlide(index) {
   const caption = document.getElementById("slide-caption");
   const slide = slides[index];
 
+  // Reset both media
   img.style.opacity = 0;
   video.style.opacity = 0;
+  img.hidden = true;
+  video.hidden = true;
 
   setTimeout(() => {
     if (slide.type === "photo") {
       img.src = slide.src;
       img.hidden = false;
-      video.hidden = true;
       caption.textContent = slide.caption;
       img.style.opacity = 1;
     } else {
       video.src = slide.src;
       video.hidden = false;
-      img.hidden = true;
       caption.textContent = slide.caption;
+
       video.load();
       video.autoplay = true;
       video.muted = true;
       video.loop = false;
 
       video.oncanplay = () => {
-      setTimeout(() => {
-      video.play();
-      video.style.opacity = 1;
-      }, 100);
-    };
-   
-      clearInterval(autoSlideTimer); // Pause for video
+        setTimeout(() => {
+          video.play();
+          video.style.opacity = 1;
+        }, 100);
+      };
+
+      // Pause auto-slide for video
+      clearInterval(autoSlideTimer);
+
       video.onended = () => {
-      const audio = document.getElementById("bg-music");
-      if (audio && audio.paused) audio.play();
+        const audio = document.getElementById("bg-music");
+        if (audio && audio.paused) audio.play();
 
-      setTimeout(() => {
-      currentSlide = (currentSlide + 1) % slides.length;
-      showSlide(currentSlide);
-      startAutoSlide();
-      }, 500);
-    };
-
+        setTimeout(() => {
+          currentSlide = (currentSlide + 1) % slides.length;
+          showSlide(currentSlide);
+          startAutoSlide();
+        }, 500);
+      };
     }
   }, 100);
 }
+
 
 function startAutoSlide() {
   clearInterval(autoSlideTimer);
@@ -606,6 +610,10 @@ function displayBotMessages() {
         
         // Scroll to bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Log bot message to Google Sheet
+        logChatToGoogleSheet(msg, 'bot');
+
       }, 1500);
     }, index * 2500);
   });
@@ -839,11 +847,43 @@ function addMessage(text, sender) {
   
   const messageElement = document.createElement('div');
   messageElement.classList.add('message', sender + '-message');
-  messageElement.textContent = text;
+  messageElement.innerHTML = text; // Use innerHTML to allow for themed spans in bot messages
   
   chatMessages.appendChild(messageElement);
   chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  // --- NEW: Log message to Google Sheet ---
+  logChatToGoogleSheet(text, sender);
 }
+
+// --- NEW FUNCTION: To send chat data to Google Sheet ---
+function logChatToGoogleSheet(message, sender) {
+  if (!WEB_APP_URL || WEB_APP_URL === 'YOUR_DEPLOYED_WEB_APP_URL_HERE') {
+    console.warn("WEB_APP_URL is not set. Chat messages will not be logged to Google Sheet.");
+    return;
+  }
+
+  fetch('https://script.google.com/macros/s/AKfycbzR5YJcx0ogDWC-6uLCwkEyW7PQS083KTNaBsowpKiuEwpon49Gr8-72bDeA5bzUlgZlg/exec', {
+    method: 'POST',
+    mode: 'no-cors', // Required for cross-origin requests from a simple HTML file
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sender: sender,
+      message: message
+    })
+  })
+  .then(response => {
+    // In 'no-cors' mode, the response is opaque. We can't read its status or body.
+    // The request is sent, but we can't confirm success from the client-side.
+    console.log('Chat message sent to Google Sheet (response is opaque due to no-cors).');
+  })
+  .catch(error => {
+    console.error('Error sending chat message to Google Sheet:', error);
+  });
+}
+
 
 function respondToUser(message) {
   const chatMessages = document.getElementById('chat-messages');
@@ -873,11 +913,11 @@ function respondToUser(message) {
 
   // Add your thank-you + invite to play "Let's Remember"
   setTimeout(() => {
-    addMessage(response, 'bot');
+    addMessage(response, 'bot'); // This will also log to sheet
 
     // Thank you message
     setTimeout(() => {
-      addMessage("Before we wrap this up... wanna play something sweet? 💭 It’s called *Let's Remember* — where you finish our memories!", 'bot');
+      addMessage("Before we wrap this up... wanna play something sweet? 💭 It’s called *Let's Remember* — where you finish our memories!", 'bot'); // This will also log to sheet
 
       // Start the memory game
       isInLetsRemember = true;
@@ -885,7 +925,7 @@ function respondToUser(message) {
       memoryAnswers = [];
 
       setTimeout(() => {
-        addMessage(letsRememberFlow[letsRememberStep], 'bot');
+        addMessage(letsRememberFlow[letsRememberStep], 'bot'); // This will also log to sheet
       }, 1500);
     }, 1500);
 
@@ -913,6 +953,90 @@ function respondToUser(message) {
       waitingForRishabMessage = true;
     }
     
-    addMessage(response, 'bot');
+    addMessage(response, 'bot'); // This will also log to sheet
   }, 1500);
+}
+
+
+// Update the showSlide function to handle the new design
+function showSlide(index) {
+  const img = document.getElementById("slide-img");
+  const video = document.getElementById("slide-video");
+  const caption = document.getElementById("slide-caption");
+  const slide = slides[index];
+  
+  // Update progress dots
+  updateProgressDots(index);
+
+  img.style.opacity = 0;
+  video.style.opacity = 0;
+
+  setTimeout(() => {
+    if (slide.type === "photo") {
+      img.src = slide.src;
+      img.hidden = false;
+      video.hidden = true;
+      caption.textContent = slide.caption;
+      img.style.opacity = 1;
+      
+      // Add subtle animation
+      img.style.transform = "scale(0.95)";
+      setTimeout(() => {
+        img.style.transition = "transform 0.5s ease";
+        img.style.transform = "scale(1)";
+      }, 50);
+    } else {
+      video.src = slide.src;
+      video.hidden = false;
+      img.hidden = true;
+      caption.textContent = slide.caption;
+      video.load();
+      video.autoplay = true;
+      video.muted = true;
+      video.loop = false;
+
+      video.oncanplay = () => {
+        setTimeout(() => {
+          video.play();
+          video.style.opacity = 1;
+          
+          // Add subtle animation
+          video.style.transform = "scale(0.95)";
+          setTimeout(() => {
+            video.style.transition = "transform 0.5s ease";
+            video.style.transform = "scale(1)";
+          }, 50);
+        }, 100);
+      };
+      
+      clearInterval(autoSlideTimer); // Pause for video
+      video.onended = () => {
+        const audio = document.getElementById("bg-music");
+        if (audio && audio.paused) audio.play();
+
+        setTimeout(() => {
+          currentSlide = (currentSlide + 1) % slides.length;
+          showSlide(currentSlide);
+          startAutoSlide();
+        }, 500);
+      };
+    }
+  }, 100);
+}
+
+// Add progress dots functionality
+function updateProgressDots(currentIndex) {
+  const dotsContainer = document.querySelector(".progress-dots");
+  dotsContainer.innerHTML = "";
+  
+  slides.forEach((_, index) => {
+    const dot = document.createElement("div");
+    dot.className = "progress-dot";
+    dot.style.width = "12px";
+    dot.style.height = "12px";
+    dot.style.borderRadius = "50%";
+    dot.style.backgroundColor = index === currentIndex ? "#e25594" : "#ffcce0";
+    dot.style.transition = "background-color 0.3s ease";
+    dotsContainer.appendChild(dot);
+  });
 }
