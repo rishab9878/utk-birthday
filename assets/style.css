@@ -141,7 +141,7 @@ button:hover {
 }
 
 .popup-content {
-  font-family: 'Satisfy', cursive;
+  font-family: 'Georgia', cursive;
   font-weight: bold;
   letter-spacing: 2px;
   background: url('letter-bg.jpg'); 
@@ -157,6 +157,9 @@ button:hover {
   animation: popUp 0.5s ease;
   position: relative;
   font-size: 15px;
+  max-height: 80vh;
+  overflow-y: auto;
+  text-align: justify;
   line-height: 1.6;
 }
 
