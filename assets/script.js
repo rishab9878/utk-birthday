@@ -8,7 +8,7 @@ const letsRememberFlow = [
   "🎬 What was the first thing you said that made him laugh?",
   "🌅 That Sholay bike ride — what song was playing in your head?",
   "He'll smile reading all this. 💌 Want to send a final message to him?",
-  "Delivering your memories with sparkles and heartbeats 💖 Thanks for playing *Let's Remember*!"
+  "Delivering your memories with sparkles and heartbeats 💖 Thanks for playing Let's Remember!"
 ];
 
 // --- NEW: Google Apps Script Web App URL ---
@@ -903,10 +903,10 @@ function respondToUser(message) {
     
     if (waitingForRishabMessage) {
   const rishabResponses = [
-    `Aww, that's so sweet! 💖 I'll make sure Rishab sees your message: "${message}"`,
-    `Your words are going to make Rishab’s day! ✨ Here's what you said: "${message}"`,
-    `What a beautiful message! 🥺 I recorded this for Rishab: "${message}"`,
-    `Rishab will be so touched reading this! 💕 Your message: "${message}"`
+    `Aww, that's so sweet! 💖 I'll make sure Rishab sees your message`,
+    `Your words are going to make Rishab’s day! ✨`,
+    `What a beautiful message! 🥺 I recorded this for Rishab`,
+    `Rishab will be so touched reading this! 💕`
   ];
   response = rishabResponses[Math.floor(Math.random() * rishabResponses.length)];
   waitingForRishabMessage = false;
@@ -917,7 +917,7 @@ function respondToUser(message) {
 
     // Thank you message
     setTimeout(() => {
-      addMessage("Before we wrap this up... wanna play something sweet? 💭 It’s called *Let's Remember* — where you finish our memories!", 'bot'); // This will also log to sheet
+      addMessage("Before we wrap this up... wanna play something sweet? 💭 It’s called Let's Remember — where you finish our memories!", 'bot'); // This will also log to sheet
 
       // Start the memory game
       isInLetsRemember = true;
