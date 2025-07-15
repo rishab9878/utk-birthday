@@ -12,14 +12,14 @@
 
 <!-- Timeline Progress Bar -->
 <div id="timeline">
-  <div class="timeline-step" id="step-intro">💖 Intro</div>
-  <div class="timeline-step" id="step-slideshow">📸 Moments</div>
-  <div class="timeline-step" id="step-loveNotes">💌 Notes</div>
-  <div class="timeline-step" id="step-letters">📬 Letters</div>
-  <div class="timeline-step" id="step-quiz">💡 Quiz</div>
-  <div class="timeline-step" id="step-surprise">🎁 Surprise</div>
-  <div class="timeline-step" id="step-appreciation">🎉 Appreciation</div>
-  <div class="timeline-step" id="step-goodbye">🌟 Goodbye</div>
+  <div class="timeline-step" id="step-intro">Intro</div>
+  <div class="timeline-step" id="step-slideshow">Moments</div>
+  <div class="timeline-step" id="step-loveNotes">Notes</div>
+  <div class="timeline-step" id="step-letters">Letters</div>
+  <div class="timeline-step" id="step-quiz">Quiz</div>
+  <div class="timeline-step" id="step-surprise">Surprise</div>
+  <div class="timeline-step" id="step-appreciation">Appreciation</div>
+  <div class="timeline-step" id="step-goodbye">Goodbye</div>
 </div>
 
 
@@ -47,7 +47,6 @@
 <div class="page" id="slideshow">
   <div class="moments-container">
     <h2>Our Timeless Moments <span class="heart-divider">💖</span></h2>
-    <p class="subtitle">Swipe through our precious memories</p>
     
     <div class="polaroid-slideshow">
       <div class="slideshow-controls">
@@ -175,11 +174,11 @@
           You ask for too many kisses and then complain when I give just one.
         </p>
         <p>
-          But most of all, you make me feel like I’m *wanted*.  
+          But most of all, you make me feel like I’m wanted.  
           And that’s something rare.
         </p>
         <p>
-          From “MS Beauty” to “my safe place,”  
+          From “Ms. Beauty” to “my safe place,”  
           you’ve become this rhythm in my everyday life — the voice in my head that sounds like mischief and love.
         </p>
         <p>
@@ -189,7 +188,7 @@
         </p>
         <p>
           I won’t say future, forever, or always.  
-          I’ll just say — *right now*, you’ve made my world softer.  
+          I’ll just say — right now, you’ve made my world softer.  
           And that’s enough to write a love song about 💛
         </p>
     </div>
@@ -217,7 +216,7 @@
       <h3 class="score-title">You scored <span id="final-score"></span>/5 💖</h3>
       <p id="reward-message" class="reward-message"></p>
       <div id="reward-gift" class="reward-gift"></div>
-      <button id="claimBtn" onclick="nextPage('surprise-prompt')" class="primary-btn">🎁 Click to Claim 🎉</button>
+      <button id="claimBtn" onclick="nextPage('surprise-prompt')" class="primary-btn">Click to Claim 🎉</button>
       <div id="confetti" class="confetti-container"></div>
     </div>
   </div>
@@ -228,7 +227,7 @@
  <!-- 🎁 Redesigned Surprise Prompt Page -->
 <div class="page" id="surprise-prompt">
   <div class="surprise-card glass">
-    <h2 class="section-title">🎁 Are you ready for a Surprise??</h2>
+    <h2 class="section-title">Are you ready for a Surprise??</h2>
 
     <div class="surprise-buttons">
       <button class="yes-btn" onclick="loadSurprise()">Yes</button>
@@ -265,6 +264,9 @@
       <div class="photo-frame" onclick="openImageModal('assets/photo2.jpg')">
         <img src="assets/photo2.jpg" alt="Together">
       </div>
+      <div class="photo-frame" onclick="openImageModal('assets/photo4.jpg')">
+        <img src="assets/photo6.jpg" alt="Us">
+      </div>
     </div>
 
     <!-- Center Column - Video -->
@@ -287,23 +289,22 @@
       <div class="photo-frame" onclick="openImageModal('assets/photo4.jpg')">
         <img src="assets/photo4.jpg" alt="Us">
       </div>
+      <div class="photo-frame" onclick="openImageModal('assets/photo4.jpg')">
+        <img src="assets/photo5.jpg" alt="Us">
+      </div>
     </div>
   </div>
 
   <!-- Action Buttons -->
   <div class="surprise-actions">
     <button onclick="replayVideo()" class="lover-btn">
-      <span>🔄 Replay</span>
+      <span>Replay</span>
     </button>
     <button onclick="nextPage('appreciation')" class="lover-btn">
-      <span>Continue 💫</span>
+      <span>Continue</span>
     </button>
   </div>
 
-  <!-- Floating Elements -->
-  <div class="floating-hearts"></div>
-  <div class="floating-lyrics">"Can I go where you go?"</div>
-</div>
 
 <!-- Appreciation Page --> 
 <div class="page" id="appreciation"> <div class="appreciation-message"> 
