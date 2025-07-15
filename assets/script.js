@@ -858,7 +858,7 @@ function addMessage(text, sender) {
 
 // --- NEW FUNCTION: To send chat data to Google Sheet ---
 function logChatToGoogleSheet(message, sender) {
-  if (!WEB_APP_URL || WEB_APP_URL === 'YOUR_DEPLOYED_WEB_APP_URL_HERE') {
+  if (!WEB_APP_URL || WEB_APP_URL === 'https://script.google.com/macros/s/AKfycbzR5YJcx0ogDWC-6uLCwkEyW7PQS083KTNaBsowpKiuEwpon49Gr8-72bDeA5bzUlgZlg/exec') {
     console.warn("WEB_APP_URL is not set. Chat messages will not be logged to Google Sheet.");
     return;
   }
