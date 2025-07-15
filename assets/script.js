@@ -746,7 +746,7 @@ document.getElementById("wishForm").addEventListener("submit", function (e) {
  
 
 /*
-// Secret Letter
+// Secret Letter */
 
 function checkSecret() {
   const password = prompt("Enter the secret password to unlock 💌:");
@@ -758,8 +758,6 @@ function checkSecret() {
     alert("Oops! Wrong password 💔");
   }
 }
-*/
-
 
 // 🎥 Video Player Logic
 function initVideo() {
