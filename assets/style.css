@@ -2685,7 +2685,7 @@ button, .envelope, .option-btn {
 }
 
 .next-section-btn {
-  margin-top: 35px;
+  margin-top: 20px;
   padding: 12px 30px;
   font-size: 18px;
   background: linear-gradient(135deg, #ff85b3, #ffcce0);
