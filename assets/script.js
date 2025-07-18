@@ -13,7 +13,7 @@ const letsRememberFlow = [
 
 // --- NEW: Google Apps Script Web App URL ---
 // IMPORTANT: Replace 'YOUR_DEPLOYED_WEB_APP_URL_HERE' with the actual URL you got after deploying your Apps Script.
-const WEB_APP_URL = 'YOUR_DEPLOYED_WEB_APP_URL_HERE';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzR5YJcx0ogDWC-6uLCwkEyW7PQS083KTNaBsowpKiuEwpon49Gr8-72bDeA5bzUlgZlg/exec';
 
 
 // ------------------------ SLIDESHOW LOGIC ------------------------
@@ -22,16 +22,16 @@ let currentSlide = 0;
 let autoSlideTimer;
 
 const slides = [
-  { type: "photo", src: "media/photo1.jpg", caption: "This is where our story began." },
-  { type: "photo", src: "media/photo2.jpg", caption: "Laughs like these stay forever." },
-  { type: "photo", src: "media/photo3.jpg", caption: "Your eyes had me stuck in a loop." },
-  { type: "photo", src: "media/photo4.jpg", caption: "Wrapped in golden light - each other!" },
-  { type: "photo", src: "media/photo5.jpg", caption: "Could look at you forever." },
-  { type: "video", src: "media/video1.mp4", caption: "Remember this moment?" },
-  { type: "video", src: "media/video2.mp4", caption: "My chaos, my calm." },
-  { type: "video", src: "media/video3.mp4", caption: "Caught in the act of being adorable." },
-  { type: "video", src: "media/video4.mp4", caption: "The way you smile 🥹" },
-  { type: "video", src: "media/video5.mp4", caption: "And you stole the show again." }
+  { type: "photo", src: "media/photo1.jpg", caption: "This is where our story began.",loading :"lazy" },
+  { type: "photo", src: "media/photo2.jpg", caption: "Laughs like these stay forever.",loading :"lazy" },
+  { type: "photo", src: "media/photo3.jpg", caption: "Your eyes had me stuck in a loop.",loading :"lazy" },
+  { type: "photo", src: "media/photo4.jpg", caption: "Wrapped in golden light - each other!",loading :"lazy" },
+  { type: "photo", src: "media/photo5.jpg", caption: "Could look at you forever.",loading :"lazy" },
+  { type: "video", src: "media/video1.mp4", caption: "Remember this moment?",loading :"lazy" },
+  { type: "video", src: "media/video2.mp4", caption: "My chaos, my calm.",loading :"lazy" },
+  { type: "video", src: "media/video3.mp4", caption: "Caught in the act of being adorable.",loading :"lazy" },
+  { type: "video", src: "media/video4.mp4", caption: "The way you smile 🥹",loading :"lazy" },
+  { type: "video", src: "media/video5.mp4", caption: "And you stole the show again.",loading :"lazy" }
 ];
 
 function showSlide(index) {
@@ -295,7 +295,7 @@ function claimSurprise() {
   document.getElementById("claimBtn").innerText = "🎊 Claimed!";
 
   setTimeout(() => {
-    nextPage("surprise");
+    nextPage("surprise-pr");
     setTimeout(hideSurpriseText, 4000);
   }, 2000);
 }
@@ -749,9 +749,9 @@ document.getElementById("wishForm").addEventListener("submit", function (e) {
 // Secret Letter */
 
 function checkSecret() {
-  const password = prompt("Enter the secret password to unlock 💌:");
+  const password = prompt("Enter your phone number to unlock 💌:");
 
-  if (password === "utklove23") {
+  if (password === "7076863754") {
     document.getElementById("secretLetter").style.display = "block";
     document.body.style.overflow = "hidden"; // prevent background scroll
   } else if (password !== null) {
@@ -856,7 +856,7 @@ function addMessage(text, sender) {
 
 // --- NEW FUNCTION: To send chat data to Google Sheet ---
 function logChatToGoogleSheet(message, sender) {
-  if (!WEB_APP_URL || WEB_APP_URL === 'https://script.google.com/macros/s/AKfycbzR5YJcx0ogDWC-6uLCwkEyW7PQS083KTNaBsowpKiuEwpon49Gr8-72bDeA5bzUlgZlg/exec') {
+  if (!WEB_APP_URL || WEB_APP_URL === 'YOUR_DEPLOYED_WEB_APP_URL_HERE') {
     console.warn("WEB_APP_URL is not set. Chat messages will not be logged to Google Sheet.");
     return;
   }
