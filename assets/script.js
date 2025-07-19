@@ -206,6 +206,11 @@ function showQuestion() {
   optionsContainer.innerHTML = "";
   document.getElementById("feedback").innerText = "";
 
+  const progress = ((currentQuestion) / quizData.length) * 100;
+  document.getElementById("quizProgressBar").style.width = `${progress}%`;
+  document.getElementById("question-counter").innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
+
+
   q.options.forEach(option => {
     const btn = document.createElement("button");
     btn.classList.add("option-btn");
@@ -246,6 +251,11 @@ function showQuizEnd() {
   document.getElementById("quiz-end").style.display = "block";
   document.getElementById("final-score").innerText = score;
 
+  document.getElementById("quizProgressBar").style.width = `100%`;
+document.getElementById("question-counter").innerText = `Quiz Complete 🎉`;
+
+
+  
   const rewardMsg = document.getElementById("reward-message");
   const rewardGift = document.getElementById("reward-gift");
   rewardMsg.innerHTML = "";
