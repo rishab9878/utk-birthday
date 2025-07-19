@@ -28,6 +28,8 @@
   <audio id="bg-music" loop>
   <source src="assets/lover.mp3" type="audio/mpeg" />
   </audio>
+
+  
   <!-- Landing Page -->
   <div class="page active" id="landing">
     <h1 style="animation: bounceIn 1s ease-out;">🎉 It's a Special Day! 🎉</h1>
@@ -36,11 +38,15 @@
   </div>
 
   <!-- Intro Page -->
-  <div class="page" id="intro">
-    <h2>Happy Birthday, Utkalika! 💕</h2>
-    <p>From your little chaos — Rishab</p>
-    <button onclick="nextPage('slideshow')">See Our Moments</button>
+  <!-- Redesigned Intro Page -->
+<div class="page" id="intro">
+  <div class="intro-card">
+    <h2 class="intro-title">Happy Birthday, Utkalika! 💖</h2>
+    <p class="intro-subtitle">From your little chaos — Rishab</p>
+    <button class="intro-btn" onclick="nextPage('slideshow')">See Our Moments</button>
   </div>
+</div>
+
 
 <!-- Slideshow Page -->
 <!-- 📸 Moments Page - Redesigned -->
@@ -202,16 +208,18 @@
 <!-- 💡 Modern Quiz Page -->
 <div class="page" id="quiz">
   <div class="quiz-card glass">
-    <h2 class="section-title">💡 Quiz Time! 💡</h2>
+    <h2 class="quiz-heading">How Well Do You Remember?</h2>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="quizProgressBar"></div>
+    </div>
+    <p class="question-counter" id="question-counter">Question 1 of 5</p>
 
-    <!-- Question Area -->
     <div id="quiz-box" class="quiz-box">
       <p id="question-text" class="quiz-question"></p>
       <div id="options" class="quiz-options"></div>
       <p id="feedback" class="quiz-feedback"></p>
     </div>
 
-    <!-- Final Score + Reward -->
     <div id="quiz-end" class="quiz-end" style="display:none;">
       <h3 class="score-title">You scored <span id="final-score"></span>/5 💖</h3>
       <p id="reward-message" class="reward-message"></p>
@@ -221,6 +229,7 @@
     </div>
   </div>
 </div>
+
 
 
 <!-- Surprise Prompt Page --> 
@@ -353,7 +362,7 @@
 </p>
 
 <p>
-  But some things are left unsaid for too long, and maybe they start to hurt in silence. So, for once, I’m letting it all out.
+  Hey,
 </p>
 
 <p>
@@ -365,19 +374,23 @@
 </p>
 
 <p>
-  I know you were going through your own struggles. You weren’t in the best mental space, and you said you didn’t have time. And honestly, I was happy whenever you did call, even if it was just for a moment. But deep down, I felt disrespected. I was showing up with effort and care, but it felt like I was being taken for granted. No one is ever <em>too</em> busy to send a two-second reply. And I found myself asking for the bare minimum — just basic human decency — and even that felt like too much for you.
+  I know you had your own battles. You weren’t in the best mental space. You said you didn’t have time — and I understood that. I never expected daily calls or grand gestures. But what I did expect was basic respect. A two-second reply. A message to say “I’m okay.” That’s all.
 </p>
 
 <p>
-  I never asked for grand gestures. I didn’t even want constant attention. But going days, even weeks, without a single message? Not even a ten-second check-in? That silence said more than any words ever could.
+ Instead, I felt like I was constantly begging for the bare minimum. And when silence becomes louder than words, it’s hard not to feel invisible. You used to care. You used to talk to me like I mattered. Now I was just... there. Waiting for replies that rarely came. Wondering what I did wrong.
 </p>
 
 <p>
-  And then there was that day in Oia — your birthday. That moment broke something in me. I was right there beside you, trying to make the day special, trying to make <em>you</em> feel loved. But still, I felt so alone. You asked me why I was quiet — and I couldn’t say it then — but it was because I had never felt so invisible next to someone I loved so much. I had imagined us being close that day, laughing, sharing that beautiful place together. But you didn’t even look at me properly. I know you were excited — you’d been waiting to visit that place for so long — but I was there too… and it felt like you forgot that.
+  I still kept my phone beside me at night, hoping your name would pop up. I waited for those little things. But they never came.
 </p>
 
 <p>
-  When you went back home, I stayed here hoping, praying, wishing that everything would be okay for your family. And every time you called — scared, anxious, or lonely — I was there. No matter where I was, I picked up. I supported you in every way I could. But looking back now… I think I was wrong. It felt like once things started getting better on your end, you slowly began drifting away. And in the end… what happened? You moved on. While I was still hoping and praying for your family’s peace, you were already letting go of <em>us</em>.
+  And then Oia — your birthday. That broke something in me. I was right there, trying to make it special for you. But you didn’t even really look at me that day. You asked me why I was so quiet — and I couldn’t say it then — but it was because I had never felt so alone beside someone I loved so deeply. I was invisible even when I was right next to you
+</p>
+
+<p>
+  When you went back home, I prayed for your family. I was there whenever you needed me — anxious, scared, or low — and I showed up every single time. But once things started getting better, I felt you slowly drift away. You moved on. And I was still here — hurting, praying, hoping — for all of it to somehow feel real again.
 </p>
 
 <p>
@@ -385,15 +398,21 @@
 </p>
 
 <p>
-  Lately, I’ve been taking therapy. I needed it — because holding in all of this pain was starting to break me from the inside. And slowly, I’m trying to heal, trying to understand, trying to breathe again. But some wounds… they take time.
+ In the past two months, I’ve been to therapy because the all these became so much — the panic attacks, the sleepless nights, the way I began snapping at people who didn’t deserve it. I didn’t recognise myself anymore. And I’m still trying. Still healing. Still figuring it out.
 </p>
 
 <p>
-  Take care of yourself. And yes, don’t overthink too much. I genuinely want you to stay happy. Just… next time, please learn to respect someone who truly cares about you and worries for you. And please, stay aware of people around you in Bangalore — especially the men.
+ Please take care of yourself. And yes, don’t overthink too much. I genuinely want you to stay happy and safe. Just… next time, please learn to respect someone who truly cares about you and worries for you. 
+ And please, stay aware of people around you in Bangalore — especially the men.
 </p>
 
 <p>
-  And yes... I still love you. Maybe not in the same way, not with the same hope — but with the part of me that once believed in us. This is the last time I’ll say it… and I mean it.
+  And yes… I still love you. Not with the same hope, but I’ll be waiting — if someday in the future you want to come back, I’m ready to accept you as you are.
+Because some parts of love… don’t fade. They just learn to stay quiet.
+</p>
+
+<p>
+  If I knew that airport hug would be our last… I would’ve held on for a little longer.
 </p>
 
 <p>
@@ -437,6 +456,7 @@
       </button>
     </div>
   </div>
+  
 
   <script src="assets/script.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
