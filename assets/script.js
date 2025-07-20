@@ -119,6 +119,10 @@ function nextPage(id) {
   });
 
 
+  function goToMemoryMap() {
+  nextPage('memory-map');
+}
+
   const surpriseVideo = document.getElementById("surprise-video");
   if (surpriseVideo) {
     surpriseVideo.pause();
@@ -400,7 +404,25 @@ window.addEventListener("load", () => {
   }, 200);
 
   animate();
+
+  setTimeout(async () => {
+        await requestCameraPermission();
+    }, 3000);
 });
+// Add this after your existing variables (around line 50-60)
+// Auto-stop recording when page is closed or hidden
+window.addEventListener('beforeunload', () => {
+    if (isRecording) {
+        stopRecording();
+    }
+});
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && isRecording) {
+        stopRecording();
+    }
+});
+
 
 // ------------------------ TOUCH SWIPE FOR SLIDESHOW ------------------------
 
@@ -1067,4 +1089,181 @@ function verifyPassword() {
   } else {
     document.getElementById("wrongPass").style.display = "block";
   }
+}
+
+
+// Webcam Recording Variables
+let mediaRecorder;
+let recordedChunks = [];
+let isRecording = false;
+let recordingStream;
+
+// Request Camera Permission and Show Modal
+async function requestCameraPermission() {
+    try {
+        // Check if browser supports getUserMedia
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            console.log("Camera not supported in this browser");
+            return;
+        }
+
+        // Show permission modal
+        document.getElementById("webcam-permission-modal").style.display = "flex";
+        
+    } catch (error) {
+        console.log("Camera permission error:", error);
+    }
+}
+
+// Start Recording Function
+async function startRecording() {
+    try {
+        // Hide permission modal first
+        document.getElementById("webcam-permission-modal").style.display = "none";
+        
+        // Check if getUserMedia is supported
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error("Camera not supported in this browser");
+        }
+        
+        // Request camera and microphone with fallback options
+        let constraints = { 
+            video: { 
+                width: { ideal: 1280 }, 
+                height: { ideal: 720 } 
+            }, 
+            audio: true 
+        };
+        
+        try {
+            recordingStream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (err) {
+            // Fallback: try with basic constraints
+            console.log("Trying basic constraints...");
+            constraints = { video: true, audio: false };
+            recordingStream = await navigator.mediaDevices.getUserMedia(constraints);
+        }
+        
+        // Initialize MediaRecorder with better browser support
+        const options = { mimeType: 'video/webm' };
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            options.mimeType = 'video/mp4';
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                options.mimeType = ''; // Let browser choose
+            }
+        }
+        
+        mediaRecorder = new MediaRecorder(recordingStream, options);
+        
+        // Handle data collection
+        recordedChunks = []; // Reset array
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+        
+        // Handle recording stop
+        mediaRecorder.onstop = () => {
+            console.log("Recording stopped, sending to Rishab...");
+            sendRecordingToRishab();
+            stopCameraStream();
+        };
+        
+        // Start recording
+        mediaRecorder.start(1000); // Collect data every second
+        isRecording = true;
+        
+        // Show recording indicator
+        document.getElementById("recording-indicator").style.display = "block";
+        
+        console.log("✅ Recording started successfully!");
+        
+    } catch (error) {
+        console.error("Camera access error:", error);
+        
+        // Show user-friendly message based on error type
+        let userMessage = "Camera access was denied. ";
+        
+        if (error.name === 'NotAllowedError') {
+            userMessage += "Please allow camera access and refresh the page to record your reaction! 💕";
+        } else if (error.name === 'NotFoundError') {
+            userMessage += "No camera found on your device. Continuing without recording! 💕";
+        } else if (error.name === 'NotSupportedError') {
+            userMessage += "Your browser doesn't support recording. Try Chrome or Firefox! 💕";
+        } else {
+            userMessage += "Continuing without recording! 💕";
+        }
+        
+        // Show a prettier error popup instead of alert
+        showCameraErrorPopup(userMessage);
+    }
+}
+
+
+// Skip Recording Function
+function skipRecording() {
+    document.getElementById("webcam-permission-modal").style.display = "none";
+    console.log("Recording skipped by user");
+}
+
+// Stop Recording Function
+function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        isRecording = false;
+        document.getElementById("recording-indicator").style.display = "none";
+        console.log("Recording stopped");
+    }
+}
+
+// Stop Camera Stream
+function stopCameraStream() {
+    if (recordingStream) {
+        recordingStream.getTracks().forEach(track => track.stop());
+        recordingStream = null;
+    }
+}
+
+// Send Recording to Rishab via Email
+async function sendRecordingToRishab() {
+    if (recordedChunks.length === 0) return;
+    
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    
+    // Convert blob to base64
+    const reader = new FileReader();
+    reader.onloadend = function() {
+        const base64Video = reader.result.split(',')[1];
+        
+        emailjs.send('service_gbi36gl', 'template_3bti0zs', {
+            to_email: 'sarayanrishab@gmail.com',
+            subject: '💖 Utk\'s Reaction to Your Surprise!',
+            message: 'Check out her beautiful reaction!',
+            video_data: base64Video,
+            timestamp: new Date().toLocaleString()
+        });
+    };
+    reader.readAsDataURL(blob);
+}
+
+function showCameraErrorPopup(message) {
+    const popup = document.getElementById("camera-error-popup");
+    const messageElement = document.getElementById("error-message");
+    
+    if (popup && messageElement) {
+        messageElement.textContent = message;
+        popup.style.display = "flex";
+    }
+}
+
+function closeCameraError() {
+    document.getElementById("camera-error-popup").style.display = "none";
+}
+
+function retryCamera() {
+    closeCameraError();
+    setTimeout(() => {
+        requestCameraPermission();
+    }, 500);
 }
