@@ -423,7 +423,7 @@ slideshowElement.addEventListener("mouseup", (e) => {
 });
 
 function handleSwipe(diff) {
-  if (Math.abs(diff) > 50) {
+  if (Math.abs(diff) > 30) {
     clearInterval(autoSlideTimer);
     currentSlide = diff < 0
       ? (currentSlide + 1) % slides.length
@@ -564,7 +564,6 @@ function showGlitchPopup() {
 
   const glitchMessages = [
     "Oops! Are you sure? Try 'Yes' 😋",
-    "No doesn't exist in my dictionary 💘",
     "Utk, don't break my heart 😭",
     "Come on, you know you want to see it 😄",
     "Seriously? Just click Yes! 🎉"
@@ -701,33 +700,6 @@ for (let i = 0; i < 30; i++) {
   sparkle.style.animationDelay = (Math.random() * 5) + 's';
   document.body.appendChild(sparkle);
 }
-
-window.addEventListener("DOMContentLoaded", () => {
-  const lyrics = [
-    "Can I go where you go?",
-    "You're my, my, my, my lover",
-    "All the king's horses, all the king's men",
-    "I once believed love would be burning red, but it's golden",
-    "I hope I never lose you, hope it never ends",
-    "You are what you love"
-  ];
-
-  const topOffsets = [10, 20, 30, 40, 50, 60]; // fixed vertical spacing in %
-
-  lyrics.forEach((line, i) => {
-    const lyric = document.createElement('div');
-    lyric.className = 'floating-lyric';
-    lyric.innerText = line;
-
-    // Set fixed top position and delay
-    lyric.style.top = `${topOffsets[i % topOffsets.length]}%`;
-    lyric.style.left = `-200px`;
-    lyric.style.animationDelay = `${i * 4}s`;
-    lyric.style.fontSize = `${16 + (i % 3) * 2}px`; // some variation in size
-
-    document.body.appendChild(lyric);
-  });
-});
 
 
 function updateLoveMeter(progress) {
@@ -941,7 +913,16 @@ function respondToUser(message) {
 
   return;
 }
+    else if (lowerMessage.includes('i miss you') || lowerMessage.includes('i miss him')) {
+      response = "I remember it all too well... Rishab misses you more 💔";
+    }
 
+    else if (lowerMessage.includes('i love you') || lowerMessage.includes('i love him') || lowerMessage.includes('i love rishab')) {
+      response = "This love is good. This love is bad. This love was yours 💕";
+      }
+    else if (lowerMessage.includes('i am sorry') || lowerMessage.includes("i'm sorry") || lowerMessage.includes('sorry')) {
+      response = "It's okay. You're human. So was Rishab — when he waited, when he begged, and when he finally let go 🥺";
+    }  
     else if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
       response = "You're very welcome! I'm so glad you liked it! ❤️";
     } 
@@ -1047,4 +1028,43 @@ function updateProgressDots(currentIndex) {
     dot.style.transition = "background-color 0.3s ease";
     dotsContainer.appendChild(dot);
   });
+}
+
+function cleanup() {
+    // Clear all intervals
+    if (autoSlideTimer) clearInterval(autoSlideTimer);
+    if (window.heartInterval) clearInterval(window.heartInterval);
+    
+    // Remove event listeners
+    document.removeEventListener('touchstart', handleTouchStart);
+    document.removeEventListener('touchend', handleTouchEnd);
+    
+    // Pause all videos
+    document.querySelectorAll('video').forEach(video => {
+        video.pause();
+        video.currentTime = 0;
+    });
+}
+
+
+function openPasswordPrompt() {
+  document.getElementById("passwordModal").style.display = "block";
+}
+
+function closePasswordModal() {
+  document.getElementById("passwordModal").style.display = "none";
+  document.getElementById("letterPassword").value = "";
+  document.getElementById("wrongPass").style.display = "none";
+}
+
+function verifyPassword() {
+  const entered = document.getElementById("letterPassword").value.trim();
+  const correct = "1984"; // 🔒 Replace this with your actual password
+
+  if (entered === correct) {
+    closePasswordModal();
+    document.getElementById("secretLetter").style.display = "block";
+  } else {
+    document.getElementById("wrongPass").style.display = "block";
+  }
 }
