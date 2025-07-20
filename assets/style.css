@@ -410,7 +410,7 @@ button:hover {
               radial-gradient(circle at 80% 70%, rgba(255, 192, 203, 0.2) 0%, transparent 50%),
               radial-gradient(circle at 40% 80%, rgba(255, 105, 180, 0.1) 0%, transparent 50%);
   animation: floatingBg 20s ease-in-out infinite;
-  z-index: 2;
+  z-index: 0;
 }
 
 @keyframes floatingBg {
@@ -1245,7 +1245,7 @@ body::before {
   white-space: nowrap;
   animation: floatLyrics 30s linear infinite;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
 }
 
 @keyframes floatLyrics {
@@ -1779,6 +1779,7 @@ h1, h2, h3 {
   color: #ff6184;
   margin: 20px 0;
   animation: floatUp 3s infinite alternate;
+  z-index: 3;
 }
 
 /* 💖 Buttons */
@@ -3004,7 +3005,7 @@ img, video, .surprise-img, .polaroid img, #slide-img, #slide-video {
   opacity: 0.47;
   animation: floatLyrics 30s linear infinite;
   pointer-events: none;
-  z-index: 10;
+  z-index: 3;
 }
 @keyframes floatLyrics {
   0% { transform: translateX(-100vw);}
@@ -3116,4 +3117,44 @@ img, video, .surprise-img, .polaroid img, #slide-img, #slide-video {
   border-color: #dc3545;
   background-color: #ffe6e6;
   color: #dc3545;
+}
+
+/* Modern approach - replace solid headers */
+.header {
+  background: transparent;
+  backdrop-filter: blur(20px);
+  border: none;
+  box-shadow: none;
+}
+
+/* High contrast but romantic color choices */
+body {
+  background: linear-gradient(135deg, #ffe0f0, #ffd6e8, #ffcce0);
+  color: #5a294c; /* deep plum */
+}
+
+h2, .quote, .question-counter {
+  color: #b03060; /* romantic rose */
+}
+
+button, .option-btn {
+  background: linear-gradient(45deg, #ff6184, #ffb6b9);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+
+.final-letter-container {
+  text-align: center;
+  margin-top: 40px;
+}
+
+#passwordModal input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 80%;
+  margin: 10px auto;
+  display: block;
+  font-size: 16px;
 }
