@@ -10,48 +10,6 @@
 </head>
 <body>
 
-  <!-- Webcam Permission Modal -->
-<div id="webcam-permission-modal" class="permission-modal" style="display: none;">
-    <div class="permission-overlay"></div>
-    <div class="permission-content">
-        <h2>💖 Capture This Special Moment?</h2>
-        <p>Rishab would love to see your reaction to this surprise! 
-           May we record your beautiful smile as you explore?</p>
-        <div class="permission-buttons">
-            <button onclick="startRecording()" class="yes-btn">Yes, Record My Reaction! 📹</button>
-            <button onclick="skipRecording()" class="no-btn">Maybe Later 💕</button>
-        </div>
-        <div class="privacy-notice">
-            <p>🔒 Your privacy matters:</p>
-            <ul>
-                <li>Recording stays between you and Rishab</li>
-                <li>No data stored on external servers</li>
-                <li>You can stop recording anytime</li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<!-- Recording Indicator -->
-<div id="recording-indicator" class="recording-indicator" style="display: none;">
-    <span class="recording-dot"></span>
-    Recording your reaction 💕
-</div>
-
-<!-- Camera Error Popup -->
-<div id="camera-error-popup" class="permission-modal" style="display: none;">
-    <div class="permission-overlay"></div>
-    <div class="permission-content">
-        <h2>📷 Camera Not Available</h2>
-        <p id="error-message">Camera access was denied or not available.</p>
-        <div class="permission-buttons">
-            <button onclick="closeCameraError()" class="yes-btn">Continue Without Recording 💕</button>
-            <button onclick="retryCamera()" class="no-btn">Try Again 🔄</button>
-        </div>
-    </div>
-</div>
-
-
 <!-- Timeline Progress Bar -->
 <div id="timeline">
   <div class="timeline-step" id="step-intro">Intro</div>
