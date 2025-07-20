@@ -3158,3 +3158,143 @@ button, .option-btn {
   display: block;
   font-size: 16px;
 }
+
+/* Webcam Permission Modal Styles */
+.permission-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 192, 203, 0.15);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: fadeIn 0.5s ease;
+}
+
+.permission-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.permission-content {
+    background: linear-gradient(135deg, #fff0f6, #ffeef8);
+    padding: 40px 30px;
+    border-radius: 25px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.3);
+    border: 2px solid rgba(255, 182, 193, 0.4);
+    position: relative;
+    z-index: 1;
+}
+
+.permission-content h2 {
+    font-family: 'Satisfy', cursive;
+    color: #e25594;
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.permission-content p {
+    color: #5a294c;
+    font-size: 16px;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.permission-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.permission-buttons .yes-btn,
+.permission-buttons .no-btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.yes-btn {
+    background: linear-gradient(135deg, #ff87ab, #f06a9b);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+}
+
+.yes-btn:hover {
+    background: linear-gradient(135deg, #f06a9b, #e55a8b);
+    transform: translateY(-2px);
+}
+
+.no-btn {
+    background: linear-gradient(135deg, #ffcce0, #ffd6e8);
+    color: #5a294c;
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+}
+
+.no-btn:hover {
+    background: linear-gradient(135deg, #ffb6c1, #ffcce0);
+    transform: translateY(-2px);
+}
+
+.privacy-notice {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 13px;
+    color: #5a294c;
+}
+
+.privacy-notice ul {
+    text-align: left;
+    margin: 8px 0 0 0;
+    padding-left: 20px;
+}
+
+/* Recording Indicator */
+.recording-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    z-index: 9999;
+    animation: pulse 2s infinite;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+}
+
+.recording-dot {
+    width: 10px;
+    height: 10px;
+    background: #ff4757;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
