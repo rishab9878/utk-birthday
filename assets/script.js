@@ -406,36 +406,45 @@ window.addEventListener("load", () => {
   animate();
 });
 
-// ------------------------ TOUCH SWIPE FOR SLIDESHOW ------------------------
 
-const slideshowElement = document.getElementById("slideshow");
-let startX = 0;
+// ------------------------ TOUCH SWIPE FOR SLIDESHOW (Optimized) ------------------------
+(function optimizeSlideshowTouch() {
+  const slideshowElement = document.getElementById("slideshow");
+  if (!slideshowElement) return;
+  let startX = 0;
+  let isTouch = false;
 
-slideshowElement.addEventListener("touchstart", (e) => {
-  startX = e.touches[0].clientX;
-});
-slideshowElement.addEventListener("touchend", (e) => {
-  const endX = e.changedTouches[0].clientX;
-  handleSwipe(endX - startX);
-});
-slideshowElement.addEventListener("mousedown", (e) => {
-  startX = e.clientX;
-});
-slideshowElement.addEventListener("mouseup", (e) => {
-  const endX = e.clientX;
-  handleSwipe(endX - startX);
-});
-
-function handleSwipe(diff) {
-  if (Math.abs(diff) > 30) {
-    clearInterval(autoSlideTimer);
-    currentSlide = diff < 0
-      ? (currentSlide + 1) % slides.length
-      : (currentSlide - 1 + slides.length) % slides.length;
-    showSlide(currentSlide);
-    startAutoSlide();
+  function handleSwipe(diff) {
+    if (Math.abs(diff) > 30) {
+      clearInterval(autoSlideTimer);
+      currentSlide = diff < 0
+        ? (currentSlide + 1) % slides.length
+        : (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+      startAutoSlide();
+    }
   }
-}
+
+  slideshowElement.addEventListener("touchstart", (e) => {
+    isTouch = true;
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+  slideshowElement.addEventListener("touchend", (e) => {
+    if (!isTouch) return;
+    const endX = e.changedTouches[0].clientX;
+    handleSwipe(endX - startX);
+    isTouch = false;
+  }, { passive: true });
+  slideshowElement.addEventListener("mousedown", (e) => {
+    if (isTouch) return;
+    startX = e.clientX;
+  });
+  slideshowElement.addEventListener("mouseup", (e) => {
+    if (isTouch) return;
+    const endX = e.clientX;
+    handleSwipe(endX - startX);
+  });
+})();
 
 function openImageModal(src) {
   const modal = document.getElementById("imageModal");
@@ -768,6 +777,12 @@ function initVideo() {
 
 // ❤️ Heart Particles
 function createHeartParticle(x, y) {
+  // Cache the container for heart particles
+  if (!createHeartParticle.container) {
+    createHeartParticle.container = document.querySelector('.hearts');
+  }
+  const container = createHeartParticle.container;
+  if (!container) return;
   const heart = document.createElement('div');
   heart.innerHTML = '❤️';
   heart.style.position = 'absolute';
@@ -776,9 +791,7 @@ function createHeartParticle(x, y) {
   heart.style.fontSize = `${Math.random() * 20 + 10}px`;
   heart.style.opacity = Math.random() * 0.5 + 0.5;
   heart.style.animation = `floatHeart ${Math.random() * 3 + 2}s linear forwards`;
-  
-  document.querySelector('.hearts').appendChild(heart);
-  
+  container.appendChild(heart);
   setTimeout(() => {
     heart.remove();
   }, 2000);
@@ -788,9 +801,10 @@ function createHeartParticle(x, y) {
 if (id === "surprise") {
   setTimeout(() => {
     initVideo();
-    // Start floating lyrics animation
+    // Start floating lyrics animation (prevent multiple intervals)
     const lyrics = document.querySelector('.floating-lyrics');
-    setInterval(() => {
+    if (window.lyricsInterval) clearInterval(window.lyricsInterval);
+    window.lyricsInterval = setInterval(() => {
       const lines = [
         "\"You're my, my, my, my... Lover\"",
         "\"Can I go where you go?\"",
@@ -1035,19 +1049,16 @@ function updateProgressDots(currentIndex) {
 }
 
 function cleanup() {
-    // Clear all intervals
-    if (autoSlideTimer) clearInterval(autoSlideTimer);
-    if (window.heartInterval) clearInterval(window.heartInterval);
-    
-    // Remove event listeners
-    document.removeEventListener('touchstart', handleTouchStart);
-    document.removeEventListener('touchend', handleTouchEnd);
-    
-    // Pause all videos
-    document.querySelectorAll('video').forEach(video => {
-        video.pause();
-        video.currentTime = 0;
-    });
+  // Clear all intervals
+  if (autoSlideTimer) clearInterval(autoSlideTimer);
+  if (window.heartInterval) clearInterval(window.heartInterval);
+  if (window.lyricsInterval) clearInterval(window.lyricsInterval);
+
+  // Pause all videos
+  document.querySelectorAll('video').forEach(video => {
+    video.pause();
+    video.currentTime = 0;
+  });
 }
 
 
@@ -1072,3 +1083,4 @@ function verifyPassword() {
     document.getElementById("wrongPass").style.display = "block";
   }
 }
+
