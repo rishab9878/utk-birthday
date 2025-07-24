@@ -349,7 +349,12 @@ window.addEventListener("load", () => {
   }
 
   resizeCanvas();
-  window.addEventListener("resize", resizeCanvas);
+  // Debounce resize event for performance
+  let resizeTimeout;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resizeCanvas, 100);
+  });
 
   const hearts = [];
 
@@ -513,6 +518,8 @@ function createFloatingParticles() {
   
   const particles = ['💖', '✨', '🌸', '💫', '🎀', '💕'];
   
+  // Use DocumentFragment for batch DOM insertion
+  const fragment = document.createDocumentFragment();
   for (let i = 0; i < 15; i++) {
     const particle = document.createElement('div');
     particle.innerHTML = particles[Math.floor(Math.random() * particles.length)];
@@ -525,9 +532,9 @@ function createFloatingParticles() {
     particle.style.zIndex = '1';
     particle.style.animation = `floatParticle ${Math.random() * 10 + 8}s ease-in-out infinite`;
     particle.style.animationDelay = Math.random() * 5 + 's';
-    
-    surprisePage.appendChild(particle);
+    fragment.appendChild(particle);
   }
+  surprisePage.appendChild(fragment);
 }
 
 // Add CSS animation for floating particles
@@ -705,14 +712,18 @@ nextPage("surprise");
 }, 1500);
 }
 
+
+// Batch DOM insertion for sparkles
+const sparkleFragment = document.createDocumentFragment();
 for (let i = 0; i < 30; i++) {
   const sparkle = document.createElement('div');
   sparkle.className = 'sparkle';
   sparkle.style.left = Math.random() * 100 + 'vw';
   sparkle.style.top = Math.random() * 100 + 'vh';
   sparkle.style.animationDelay = (Math.random() * 5) + 's';
-  document.body.appendChild(sparkle);
+  sparkleFragment.appendChild(sparkle);
 }
+document.body.appendChild(sparkleFragment);
 
 
 function updateLoveMeter(progress) {
@@ -761,16 +772,11 @@ function initVideo() {
   
   video.addEventListener('play', function() {
     video.classList.add('show');
-    // Create hearts when playing
-    setInterval(() => createHeartParticle(video), 500);
-  });
-  
-  
-  // Heart particles when video plays
-  video.addEventListener('play', () => {
-    setInterval(() => {
-      createHeartParticle(video.getBoundingClientRect().left + 150, 
-                         video.getBoundingClientRect().top + 100);
+    // Only one heart interval per play
+    if (window.heartInterval) clearInterval(window.heartInterval);
+    const rect = video.getBoundingClientRect();
+    window.heartInterval = setInterval(() => {
+      createHeartParticle(rect.left + 150, rect.top + 100);
     }, 300);
   });
 }
@@ -837,7 +843,10 @@ function replayVideo() {
   
   // Restart heart particles if needed
   if (window.heartInterval) clearInterval(window.heartInterval);
-  window.heartInterval = setInterval(() => createHeartParticle(video), 300);
+  const rect = video.getBoundingClientRect();
+  window.heartInterval = setInterval(() => {
+    createHeartParticle(rect.left + 150, rect.top + 100);
+  }, 300);
 }
 
 function addMessage(text, sender) {
@@ -1083,4 +1092,3 @@ function verifyPassword() {
     document.getElementById("wrongPass").style.display = "block";
   }
 }
-
