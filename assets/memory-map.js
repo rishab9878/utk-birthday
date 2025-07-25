@@ -90,23 +90,19 @@ const memoryData = [
 
 let map;
 let currentInfoWindow;
+let memoryMarkers = []; // Store marker references
 
 // Initialize the memory map
 function initMemoryMap() {
   try {
     console.log("Initializing map with", memoryData.length, "memories");
-    
-    // Create map centered on Bangalore
     map = new google.maps.Map(document.getElementById("map"), {
       zoom: 11,
-      center: { lat: 12.9716, lng: 77.5946 }, // Bangalore center
+      center: { lat: 12.9716, lng: 77.5946 },
       styles: getTaylorSwiftMapStyle()
     });
-    
-    // Add memory pins
     addMemoryPins(map, memoryData);
     addMapControls();
-    
   } catch (error) {
     console.error('Error initializing memory map:', error);
     showError('Unable to load our memories. Please try again later! 💔');
@@ -158,6 +154,11 @@ function getTaylorSwiftMapStyle() {
 
 // Add heart-shaped pins to the map
 function addMemoryPins(map, memories) {
+  // Remove old markers
+  if (memoryMarkers.length) {
+    memoryMarkers.forEach(marker => marker.setMap(null));
+    memoryMarkers = [];
+  }
   memories.forEach(memory => {
     const marker = new google.maps.Marker({
       position: { 
@@ -172,17 +173,14 @@ function addMemoryPins(map, memories) {
       title: memory.title,
       animation: google.maps.Animation.DROP
     });
-    
-    // Add click listener - THIS WAS MISSING!
     marker.addListener('click', function() {
       showMemoryDetails(map, marker, memory);
     });
-    
-    // Add hover effect
     marker.addListener('mouseover', function() {
       marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout(() => marker.setAnimation(null), 750);
     });
+    memoryMarkers.push(marker);
   });
 }
 
@@ -248,16 +246,8 @@ function filterMemories(category) {
     btn.classList.remove('active');
   });
   event.target.classList.add('active');
-  
-  map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 11,
-    center: { lat: 12.9716, lng: 77.5946 },
-    styles: getTaylorSwiftMapStyle()
-  });
-  
   const filteredMemories = category === 'all' ? memoryData : 
     memoryData.filter(memory => memory.category === category);
-  
   addMemoryPins(map, filteredMemories);
 }
 
