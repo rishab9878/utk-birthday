@@ -1,3 +1,33 @@
+const DOMCache = {
+  elements: new Map(),
+  get(id) {
+    if (!this.elements.has(id)) {
+      this.elements.set(id, document.getElementById(id));
+    }
+    return this.elements.get(id);
+  },
+  clear() {
+    this.elements.clear();
+  }
+};
+
+// Add resource preloading
+const ResourceLoader = {
+  preloadImages(sources) {
+    sources.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  },
+  preloadVideos(sources) {
+    sources.forEach(src => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.src = src;
+    });
+  }
+};
+
 let isInLetsRemember = false;
 let letsRememberStep = 0;
 let memoryAnswers = [];
@@ -39,24 +69,32 @@ function showSlide(index) {
   const video = document.getElementById("slide-video");
   const caption = document.getElementById("slide-caption");
   const slide = slides[index];
+  
+  // Update progress dots
+  updateProgressDots(index);
 
-  // Reset both media
   img.style.opacity = 0;
   video.style.opacity = 0;
-  img.hidden = true;
-  video.hidden = true;
 
   setTimeout(() => {
     if (slide.type === "photo") {
       img.src = slide.src;
       img.hidden = false;
+      video.hidden = true;
       caption.textContent = slide.caption;
       img.style.opacity = 1;
+      
+      // Add subtle animation
+      img.style.transform = "scale(0.95)";
+      setTimeout(() => {
+        img.style.transition = "transform 0.5s ease";
+        img.style.transform = "scale(1)";
+      }, 50);
     } else {
       video.src = slide.src;
       video.hidden = false;
+      img.hidden = true;
       caption.textContent = slide.caption;
-
       video.load();
       video.autoplay = true;
       video.muted = true;
@@ -66,12 +104,17 @@ function showSlide(index) {
         setTimeout(() => {
           video.play();
           video.style.opacity = 1;
+          
+          // Add subtle animation
+          video.style.transform = "scale(0.95)";
+          setTimeout(() => {
+            video.style.transition = "transform 0.5s ease";
+            video.style.transform = "scale(1)";
+          }, 50);
         }, 100);
       };
-
-      // Pause auto-slide for video
-      clearInterval(autoSlideTimer);
-
+      
+      clearInterval(autoSlideTimer); // Pause for video
       video.onended = () => {
         const audio = document.getElementById("bg-music");
         if (audio && audio.paused) audio.play();
