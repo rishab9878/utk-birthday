@@ -88,12 +88,53 @@
 </div>
 
   <!-- Love Notes Page -->
-<div class="page" id="loveNotes"> 
-  <h2>💌 Love Notes</h2> 
-  <div class="quote-card pink"><p class="quote">"Can I go where you go?"</p> <span class="author">— Lover</span> </div> 
-  <div class="quote-card blue"> <p class="quote">You turned grey skies into ‘Daylight’</p> <span class="author">— Daylight</span> 
-  </div> <div class="quote-card violet"> <p class="quote">You’re the song I didn’t know I was humming all along.</p> <span class="author">— Rishab</span> </div>
-  <button onclick="nextPage('letters')">Read Letters</button>
+<div class="page" id="loveNotes">
+  <div class="love-notes-container">
+    <h2 class="section-title">
+      <span class="title-icon">💌</span>
+      <span class="title-text">Sweet Whispers</span>
+    </h2>
+    
+    <div class="notes-grid">
+      <div class="modern-note-card" data-aos="fade-up">
+        <div class="note-content">
+          <i class="fas fa-quote-left quote-icon"></i>
+          <p class="quote">"Can I go where you go?"</p>
+          <div class="note-footer">
+            <span class="author">— Lover</span>
+            <i class="fas fa-music music-icon"></i>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modern-note-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="note-content">
+          <i class="fas fa-quote-left quote-icon"></i>
+          <p class="quote">You turned grey skies into 'Daylight'</p>
+          <div class="note-footer">
+            <span class="author">— Daylight</span>
+            <i class="fas fa-sun music-icon"></i>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modern-note-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="note-content">
+          <i class="fas fa-quote-left quote-icon"></i>
+          <p class="quote">You're the song I didn't know I was humming all along.</p>
+          <div class="note-footer">
+            <span class="author">— Rishab</span>
+            <i class="fas fa-heart music-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button class="floating-nav-button" onclick="nextPage('letters')">
+      <span class="button-text">Read My Letters</span>
+      <i class="fas fa-envelope-open-heart"></i>
+    </button>
+  </div>
 </div>
 
 <div class="page" id="letters">
