@@ -48,20 +48,21 @@ const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzR5YJcx0ogDWC-6uLC
 
 // ------------------------ SLIDESHOW LOGIC ------------------------
 
+
 let currentSlide = 0;
 let autoSlideTimer;
 
 const slides = [
-  { type: "photo", src: "media/photo1.jpg", caption: "This is where our story began.",loading :"lazy" },
-  { type: "photo", src: "media/photo2.jpg", caption: "Laughs like these stay forever.",loading :"lazy" },
-  { type: "photo", src: "media/photo3.jpg", caption: "Your eyes had me stuck in a loop.",loading :"lazy" },
-  { type: "photo", src: "media/photo4.jpg", caption: "Wrapped in golden light - each other!",loading :"lazy" },
-  { type: "photo", src: "media/photo5.jpg", caption: "Could look at you forever.",loading :"lazy" },
-  { type: "video", src: "media/video1.mp4", caption: "Your Smile is Contagious!",loading :"lazy" },
-  { type: "video", src: "media/video2.mp4", caption: "My chaos, my calm.",loading :"lazy" },
-  { type: "video", src: "media/video3.mp4", caption: "Caught in the act of being adorable.",loading :"lazy" },
-  { type: "video", src: "media/video4.mp4", caption: "The way you smile 🥹",loading :"lazy" },
-  { type: "video", src: "media/video5.mp4", caption: "And you stole the show again.",loading :"lazy" }
+  { type: "photo", src: "media/photo1.jpg", caption: "This is where our story began.", loading: "lazy" },
+  { type: "photo", src: "media/photo2.jpg", caption: "Laughs like these stay forever.", loading: "lazy" },
+  { type: "photo", src: "media/photo3.jpg", caption: "Your eyes had me stuck in a loop.", loading: "lazy" },
+  { type: "photo", src: "media/photo4.jpg", caption: "Wrapped in golden light - each other!", loading: "lazy" },
+  { type: "photo", src: "media/photo5.jpg", caption: "Could look at you forever.", loading: "lazy" },
+  { type: "video", src: "media/video1.mp4", caption: "Your smile is contagious!", loading: "lazy" },
+  { type: "video", src: "media/video2.mp4", caption: "My chaos, my calm.", loading: "lazy" },
+  { type: "video", src: "media/video3.mp4", caption: "Caught in the act of being adorable.", loading: "lazy" },
+  { type: "video", src: "media/video4.mp4", caption: "The way you smile 🥹", loading: "lazy" },
+  { type: "video", src: "media/video5.mp4", caption: "And you stole the show again.", loading: "lazy" }
 ];
 
 function showSlide(index) {
@@ -69,7 +70,7 @@ function showSlide(index) {
   const video = document.getElementById("slide-video");
   const caption = document.getElementById("slide-caption");
   const slide = slides[index];
-  
+
   // Update progress dots
   updateProgressDots(index);
 
@@ -83,7 +84,7 @@ function showSlide(index) {
       video.hidden = true;
       caption.textContent = slide.caption;
       img.style.opacity = 1;
-      
+
       // Add subtle animation
       img.style.transform = "scale(0.95)";
       setTimeout(() => {
@@ -91,6 +92,10 @@ function showSlide(index) {
         img.style.transform = "scale(1)";
       }, 50);
     } else {
+      // Clean up previous event listeners
+      video.oncanplay = null;
+      video.onended = null;
+
       video.src = slide.src;
       video.hidden = false;
       img.hidden = true;
@@ -104,7 +109,7 @@ function showSlide(index) {
         setTimeout(() => {
           video.play();
           video.style.opacity = 1;
-          
+
           // Add subtle animation
           video.style.transform = "scale(0.95)";
           setTimeout(() => {
@@ -113,7 +118,7 @@ function showSlide(index) {
           }, 50);
         }, 100);
       };
-      
+
       clearInterval(autoSlideTimer); // Pause for video
       video.onended = () => {
         const audio = document.getElementById("bg-music");
@@ -132,10 +137,29 @@ function showSlide(index) {
 
 function startAutoSlide() {
   clearInterval(autoSlideTimer);
-  autoSlideTimer = setInterval(() => {
-    currentSlide = (currentSlide + 1) % slides.length;
-    showSlide(currentSlide);
-  }, 3000); // 3s per image
+  
+  // Preload next slide
+  const nextIndex = (currentSlide + 1) % slides.length;
+  const nextSlide = slides[nextIndex];
+  if (nextSlide.type === 'photo') {
+    const img = new Image();
+    img.src = nextSlide.src;
+  } else {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.src = nextSlide.src;
+  }
+  
+  // Adjust timing based on content type
+  const currentContent = slides[currentSlide];
+  const delay = currentContent.type === 'photo' ? 4000 : 0; // Longer for photos, videos control their own timing
+  
+  if (delay > 0) {
+    autoSlideTimer = setInterval(() => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }, delay);
+  }
 }
 
 function prevSlide() {
@@ -657,8 +681,10 @@ function displayBotMessages() {
     "Heyy Utk! It's me Taylor",
     "Hope you loved this little surprise! But guess what? This isn't the end",
     "A Super cute gift hamper tailored especially for you is already on its way to your address",
+    "They will be delivered in 2 shipments...out of which 1 you will receive today throught Porter",
+    "The one will be delivered by Delhivery",
     "Tracking ID: <span style='color:#ff87ab;font-weight:600'>TN123456789</span>", // Themed color
-    "Courier partner: <span style='color:#ff87ab;font-weight:600'>Delhivery</span>", // Themed color
+    "Rishab has requested only you to open the gift hamper, not anyone else",
     "So... what did you think of this web surprise Rishab made for you?"
   ];
 
