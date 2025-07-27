@@ -39,9 +39,9 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #ffb6b9 0%, #ffcce0 100%);
+  background: linear-gradient(135deg, #000000 0%, #000000 100%);
   border-radius: 8px;
-  border: 3px solid rgba(255, 230, 239, 0.5);
+  border: 3px solid rgba(0, 0, 0, 0.5);
 }
 
 /* Section Divider */
@@ -62,7 +62,7 @@ button, .btn, .option-btn, .next-btn, .replay-btn, .yes-btn, .no-btn {
   background: linear-gradient(135deg, #ff4b91, #ff87ab);
   border: none;
   color: white;
-  padding: 12px 24px;
+  padding: 12px 20px;
   border-radius: 25px;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -95,7 +95,7 @@ button:active, .btn:active, .option-btn:active, .next-btn:active, .replay-btn:ac
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  padding: 25px;
+  padding: 20px;
 }
 
 .card:hover, .quote-card:hover, .surprise-card:hover {
@@ -192,7 +192,6 @@ body {
   font-family: 'Georgia', serif;
   background: linear-gradient(135deg, #ffdde1, #fcedf2, #f3d9fa, #d0c3f1);
   background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
   position: relative;
   color: #5a294c;
   overflow-x: hidden;
@@ -344,7 +343,6 @@ body {
 
 .page.active {
   display: flex;
-  animation: fadeIn 1s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -542,7 +540,7 @@ button:hover {
  
 
 .quiz-card {
-  background: linear-gradient(135deg, #fff0f6 60%, #ffe0f0 100%);
+  background: linear-gradient(135deg, #fbeefa 60%, #fbeefa 100%);
   border-radius: 28px;
   box-shadow: 0 8px 32px 0 rgba(255,105,180,0.18), 0 1.5px 8px 0 rgba(255,182,193,0.10);
   padding: 48px 32px 36px 32px;
@@ -796,27 +794,13 @@ button:hover {
 }
 /* Enhanced Surprise Page Styling */
 #surprise {
-  background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 25%, #ffd6e8 50%, #ffcce0 75%, #ffc2d8 100%);
   position: relative;
   overflow: hidden;
   min-height: 100vh;
   padding: 40px 20px;
 }
 
-/* Floating background elements */
-#surprise::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 80% 70%, rgba(255, 192, 203, 0.2) 0%, transparent 50%),
-              radial-gradient(circle at 40% 80%, rgba(255, 105, 180, 0.1) 0%, transparent 50%);
-  animation: floatingBg 20s ease-in-out infinite;
-  z-index: 0;
-}
+
 
 @keyframes floatingBg {
   0%, 100% { transform: rotate(0deg) scale(1); }
@@ -953,7 +937,7 @@ button:hover {
 
 /* Enhanced video styling */
 .surprise-video {
-  width: 420px;
+  width: 430px;
   height: 420px;
   border-radius: 24px;
   box-shadow: 
@@ -1305,6 +1289,7 @@ button:hover {
 animation: fadeInSlide 2s ease-out;
 max-width: 700px;
 padding: 30px;
+margin: 40px auto;
 background: #fff0f6;
 border-radius: 20px;
 box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
@@ -1487,13 +1472,13 @@ text-shadow: 0 0 8px rgba(255, 192, 203, 0.4);
 
 .surprise-buttons {
 display: flex;
-gap: 20px;
+gap: 10px;
 margin-top: 30px;
 justify-content: center;
 }
 
 .yes-btn, .no-btn {
-padding: 12px 30px;
+padding: 12px 20px;
 font-size: 18px;
 background-color: #ff87ab;
 color: white;
@@ -1776,7 +1761,7 @@ body::before {
   .next-btn,
   .replay-btn {
     font-size: 14px;
-    padding: 10px 20px;
+    padding: 10px 10px;
   }
 }
 
@@ -1905,7 +1890,6 @@ h1, h2, h3 {
 
 /* 🌸 Lover Theme Base */
 #surprise {
-  background: linear-gradient(135deg, #ffdde1, #fcedf2, #f3d9fa, #d0c3f1);
   position: relative;
   overflow: hidden;
 }
@@ -2154,9 +2138,9 @@ h1, h2, h3 {
 .video-wrapper {
   position: relative;
   width: 100%;
-  border-radius: 15px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(230,85,148,0.3);
+  box-shadow: 0 10px 25px rgba(230,85,148,0.3);
 }
 #surprise-video {
   width: 100%;
@@ -2593,7 +2577,7 @@ button, .envelope, .option-btn {
 
 .bot-message, .user-message {
   max-width: 80%;
-  padding: 10px 16px;
+  padding: 10px 15px;
   margin-bottom: 12px;
   font-size: 15px;
   border-radius: 18px;
@@ -3220,7 +3204,7 @@ img, video, .surprise-img, .polaroid img, #slide-img, #slide-video {
   line-height: 1.45;
 }
 .bot-message {
-  background: #fff0f6;
+  background: #ffe1ef;
   color: var(--dark-text);
   align-self: flex-start;
   border-bottom-left-radius: 6px;
@@ -3279,7 +3263,9 @@ img, video, .surprise-img, .polaroid img, #slide-img, #slide-video {
 
 /* --- Timeline/Stepper --- */
 #timeline {
-  position: fixed; top: 0; width: 100%;
+  position: fixed; 
+  top: 1; 
+  width: 45%;
   display: flex; justify-content: center; gap: 10px;
   padding: 10px 0;
   background: rgba(255,240,246,0.82);
@@ -3428,4 +3414,11 @@ img, video, .surprise-img, .polaroid img, #slide-img, #slide-video {
   margin-top: 10px;
   font-family: 'Satisfy', cursive;
   letter-spacing: 1px;
+}
+
+
+body {
+  background: linear-gradient(135deg, #e6d1ff, #ffebf7, #dcd3ff);
+  background-size: 400% 400%;
+  overflow-x: hidden;
 }
