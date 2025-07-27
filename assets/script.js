@@ -57,7 +57,7 @@ const slides = [
   { type: "photo", src: "media/photo3.jpg", caption: "Your eyes had me stuck in a loop.",loading :"lazy" },
   { type: "photo", src: "media/photo4.jpg", caption: "Wrapped in golden light - each other!",loading :"lazy" },
   { type: "photo", src: "media/photo5.jpg", caption: "Could look at you forever.",loading :"lazy" },
-  { type: "video", src: "media/video1.mp4", caption: "Remember this moment?",loading :"lazy" },
+  { type: "video", src: "media/video1.mp4", caption: "Your Smile is Contagious!",loading :"lazy" },
   { type: "video", src: "media/video2.mp4", caption: "My chaos, my calm.",loading :"lazy" },
   { type: "video", src: "media/video3.mp4", caption: "Caught in the act of being adorable.",loading :"lazy" },
   { type: "video", src: "media/video4.mp4", caption: "The way you smile 🥹",loading :"lazy" },
