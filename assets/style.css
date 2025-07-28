@@ -429,7 +429,7 @@ button:hover {
 .click-hint {
   margin-top: 6px;
   font-size: 14px;
-  color: #e25594;
+  color: #000000;
   animation: blink 1.2s infinite;
 }
 
@@ -1634,7 +1634,7 @@ body {
 }
 
 button, .yes-btn, .no-btn, .option-btn, .next-btn, .replay-btn {
-  background: linear-gradient(45deg, #ff9aa2, #ffb6b9, #ffcbf2);
+  background: linear-gradient(45deg, #fd6da3, #fd6da3);
   border: none;
   color: white;
   font-weight: bold;
@@ -1644,7 +1644,7 @@ button, .yes-btn, .no-btn, .option-btn, .next-btn, .replay-btn {
 }
 
 button:hover, .yes-btn:hover, .no-btn:hover, .option-btn:hover, .next-btn:hover, .replay-btn:hover {
-  background: linear-gradient(45deg, #f48fb1, #f06292);
+  background: linear-gradient(45deg, #fd6da3, #fd6da3);
   transform: translateY(-2px);
 }
 
@@ -2314,7 +2314,7 @@ button, .envelope, .option-btn {
 }
 
 .chatbot-header {
-  background: linear-gradient(135deg, #ff85b3 0%, #f06292 100%); /* Lover pink gradient */
+  background: linear-gradient(135deg, #f06292 0%, #f06292 100%); /* Lover pink gradient */
   color: white;
   padding: 0px 8px ;
   display: flex;
@@ -2822,7 +2822,7 @@ button, .envelope, .option-btn {
   margin-top: 20px;
   padding: 12px 30px;
   font-size: 18px;
-  background: linear-gradient(135deg, #ff85b3, #ffcce0);
+  background: linear-gradient(135deg, #fd6da3, #fd6da3);
   color: white;
   border: none;
   border-radius: 30px;
@@ -3167,7 +3167,7 @@ img, video, .surprise-img, .polaroid img, #slide-img, #slide-video {
   position: fixed; bottom: 30px; right: 30px;
   width: 60px; height: 60px;
   border-radius: 50%;
-  background: var(--accent-gradient);
+  background: #fd6da3;
   box-shadow: 0 10px 20px rgba(255, 105, 180, 0.3);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: all 0.3s;
@@ -3280,8 +3280,8 @@ img, video, .surprise-img, .polaroid img, #slide-img, #slide-video {
   transition: background 0.3s, color 0.3s;
 }
 .timeline-step.active {
-  background: var(--primary-pink);
-  color: white; font-weight: bold;
+  background: #e6d1ff;
+  color: rgb(0, 0, 0); font-weight: bold;
   box-shadow: 0 2px 6px rgba(255,105,180,0.21);
 }
 
@@ -3345,7 +3345,7 @@ img, video, .surprise-img, .polaroid img, #slide-img, #slide-video {
   cursor: pointer;
   transition: box-shadow 0.2s, background 0.2s, color 0.2s, transform 0.15s;
   box-shadow: 0 2px 8px rgba(255, 182, 193, 0.10);
-  color: #b03060;
+  color: #ff0060;
   outline: none;
   position: relative;
   overflow: hidden;
