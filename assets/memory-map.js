@@ -91,18 +91,31 @@ const memoryData = [
 let map;
 let currentInfoWindow;
 let memoryMarkers = []; // Store marker references
+let allMarkers = new Map(); // Cache all markers by ID for reuse
+let cachedElements = {}; // Cache DOM elements
+let bounceTimeouts = new Map(); // Track bounce animation timeouts
 
 // Initialize the memory map
 function initMemoryMap() {
   try {
     console.log("Initializing map with", memoryData.length, "memories");
-    map = new google.maps.Map(document.getElementById("map"), {
+    
+    // Cache DOM elements
+    cachedElements.mapSection = document.getElementById('memory-map-section');
+    cachedElements.mapDiv = document.getElementById('map');
+    
+    map = new google.maps.Map(cachedElements.mapDiv, {
       zoom: 11,
       center: { lat: 12.9716, lng: 77.5946 },
       styles: getTaylorSwiftMapStyle()
     });
-    addMemoryPins(map, memoryData);
+    
+    // Create all markers once and cache them
+    createAllMarkers();
     addMapControls();
+    
+    // Show all markers initially
+    showMarkersForCategory('all');
   } catch (error) {
     console.error('Error initializing memory map:', error);
     showError('Unable to load our memories. Please try again later! 💔');
@@ -152,66 +165,83 @@ function getTaylorSwiftMapStyle() {
   ];
 }
 
-// Add heart-shaped pins to the map
-function addMemoryPins(map, memories) {
-  // Remove old markers
-  if (memoryMarkers.length) {
-    memoryMarkers.forEach(marker => marker.setMap(null));
-    memoryMarkers = [];
-  }
-  memories.forEach(memory => {
+// Create all markers once and cache them for reuse
+function createAllMarkers() {
+  const iconConfig = {
+    url: 'assets/heart-pin.png',
+    scaledSize: new google.maps.Size(35, 35)
+  };
+  
+  memoryData.forEach(memory => {
     const marker = new google.maps.Marker({
       position: { 
         lat: memory.coordinates[0], 
         lng: memory.coordinates[1] 
       },
-      map: map,
-      icon: {
-        url: 'assets/heart-pin.png',
-        scaledSize: new google.maps.Size(35, 35)
-      },
+      map: null, // Don't add to map initially
+      icon: iconConfig,
       title: memory.title,
       animation: google.maps.Animation.DROP
     });
-    marker.addListener('click', function() {
-      showMemoryDetails(map, marker, memory);
-    });
-    marker.addListener('mouseover', function() {
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(() => marker.setAnimation(null), 750);
-    });
-    memoryMarkers.push(marker);
+    
+    // Add optimized event listeners
+    marker.addListener('click', () => showMemoryDetails(map, marker, memory));
+    
+    // Debounced hover effect
+    marker.addListener('mouseover', () => handleMarkerHover(marker));
+    
+    // Store marker with memory data
+    marker.memoryData = memory;
+    allMarkers.set(memory.id, marker);
   });
 }
 
-// Show memory details in popup
+// Optimized hover handler with debouncing
+function handleMarkerHover(marker) {
+  // Clear any existing timeout for this marker
+  const existingTimeout = bounceTimeouts.get(marker);
+  if (existingTimeout) {
+    clearTimeout(existingTimeout);
+  }
+  
+  // Start bounce animation
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+  
+  // Set timeout to stop animation
+  const timeout = setTimeout(() => {
+    marker.setAnimation(null);
+    bounceTimeouts.delete(marker);
+  }, 750);
+  
+  bounceTimeouts.set(marker, timeout);
+}
+
+// Show/hide markers based on category (optimized version)
+function showMarkersForCategory(category) {
+  // Use requestAnimationFrame for smooth transitions
+  requestAnimationFrame(() => {
+    allMarkers.forEach(marker => {
+      const memory = marker.memoryData;
+      const shouldShow = category === 'all' || memory.category === category;
+      
+      // Only change map property if needed
+      if (shouldShow && marker.getMap() === null) {
+        marker.setMap(map);
+      } else if (!shouldShow && marker.getMap() !== null) {
+        marker.setMap(null);
+      }
+    });
+  });
+}
+
+// Show memory details in popup with lazy loading
 function showMemoryDetails(map, marker, memory) {
   if (currentInfoWindow) {
     currentInfoWindow.close();
   }
   
-  let popupContent = `
-    <div class="memory-popup">
-      <h3>${memory.title}</h3>
-      <div class="date">${formatDate(memory.date)}</div>
-      <p>${memory.description}</p>
-  `;
-  
-  if (memory.photos && memory.photos.length > 0) {
-    memory.photos.forEach(photo => {
-      popupContent += `<img src="assets/memory-photos/${photo}" alt="Memory photo" onerror="this.style.display='none'">`;
-    });
-  }
-  
-  if (memory.audioNote) {
-    popupContent += `
-      <audio controls>
-        <source src="assets/memory-notes/${memory.audioNote}" type="audio/mpeg">
-        Your browser doesn't support audio playback 💔
-      </audio>`;
-  }
-  
-  popupContent += '</div>';
+  // Create popup content with lazy-loaded images
+  const popupContent = createPopupContent(memory);
   
   currentInfoWindow = new google.maps.InfoWindow({
     content: popupContent,
@@ -219,49 +249,122 @@ function showMemoryDetails(map, marker, memory) {
   });
   
   currentInfoWindow.open(map, marker);
+  
+  // Lazy load images after popup opens
+  setTimeout(() => lazyLoadPopupImages(), 100);
 }
 
-// Add map control buttons
+// Create popup content efficiently
+function createPopupContent(memory) {
+  const parts = [
+    '<div class="memory-popup">',
+    `<h3>${memory.title}</h3>`,
+    `<div class="date">${formatDate(memory.date)}</div>`,
+    `<p>${memory.description}</p>`
+  ];
+  
+  // Add photo placeholders for lazy loading
+  if (memory.photos && memory.photos.length > 0) {
+    memory.photos.forEach(photo => {
+      parts.push(`<img data-src="assets/memory-photos/${photo}" alt="Memory photo" class="lazy-image" style="display:none;" onerror="this.style.display='none'">`);
+    });
+  }
+  
+  // Add audio if exists
+  if (memory.audioNote) {
+    parts.push(`
+      <audio controls>
+        <source src="assets/memory-notes/${memory.audioNote}" type="audio/mpeg">
+        Your browser doesn't support audio playback 💔
+      </audio>`);
+  }
+  
+  parts.push('</div>');
+  return parts.join('');
+}
+
+// Lazy load images in popup
+function lazyLoadPopupImages() {
+  const lazyImages = document.querySelectorAll('.lazy-image');
+  lazyImages.forEach(img => {
+    if (img.dataset.src) {
+      img.src = img.dataset.src;
+      img.style.display = 'block';
+      img.classList.remove('lazy-image');
+      delete img.dataset.src;
+    }
+  });
+}
+
+// Add map control buttons with event delegation
 function addMapControls() {
   const controlsHtml = `
-    <div class="map-controls">
-      <button class="map-control-btn active" onclick="filterMemories('all')">All Memories 💕</button>
-      <button class="map-control-btn" onclick="filterMemories('Lovers Fest')">Lovers Fest ✨</button>
-      <button class="map-control-btn" onclick="filterMemories('Jamming Goat')">Jamming Goat 🎵</button>
-      <button class="map-control-btn" onclick="filterMemories('Our First temple visit')">Temple Visit 🙏</button>
-      <button class="map-control-btn" onclick="filterMemories('Utk's Birthday')">Your birthday</button>
+    <div class="map-controls" id="map-controls">
+      <button class="map-control-btn active" data-category="all">All Memories 💕</button>
+      <button class="map-control-btn" data-category="Lovers Fest">Lovers Fest ✨</button>
+      <button class="map-control-btn" data-category="Jamming Goat">Jamming Goat 🎵</button>
+      <button class="map-control-btn" data-category="Our First temple visit">Temple Visit 🙏</button>
+      <button class="map-control-btn" data-category="Utk's Birthday">Your birthday</button>
     </div>
   `;
   
-  const mapSection = document.getElementById('memory-map-section');
-  const mapDiv = document.getElementById('map');
-  if (mapDiv) {
-    mapDiv.insertAdjacentHTML('beforebegin', controlsHtml);
+  if (cachedElements.mapDiv) {
+    cachedElements.mapDiv.insertAdjacentHTML('beforebegin', controlsHtml);
+    
+    // Use event delegation for better performance
+    const controlsContainer = document.getElementById('map-controls');
+    cachedElements.controlsContainer = controlsContainer;
+    
+    controlsContainer.addEventListener('click', handleControlClick);
   }
 }
 
-// Filter memories by category
-function filterMemories(category) {
-  document.querySelectorAll('.map-control-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
+// Optimized control click handler
+function handleControlClick(event) {
+  if (!event.target.classList.contains('map-control-btn')) return;
+  
+  // Update active state
+  const allButtons = cachedElements.controlsContainer.querySelectorAll('.map-control-btn');
+  allButtons.forEach(btn => btn.classList.remove('active'));
   event.target.classList.add('active');
-  const filteredMemories = category === 'all' ? memoryData : 
-    memoryData.filter(memory => memory.category === category);
-  addMemoryPins(map, filteredMemories);
+  
+  // Filter memories
+  const category = event.target.dataset.category;
+  showMarkersForCategory(category);
 }
 
-// Format date nicely
+// Legacy function kept for backward compatibility (now optimized)
+function filterMemories(category) {
+  showMarkersForCategory(category);
+  
+  // Update active button if called directly
+  if (cachedElements.controlsContainer) {
+    const buttons = cachedElements.controlsContainer.querySelectorAll('.map-control-btn');
+    buttons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.category === category);
+    });
+  }
+}
+
+// Optimized date formatting with caching
+const dateFormatCache = new Map();
 function formatDate(dateString) {
+  if (dateFormatCache.has(dateString)) {
+    return dateFormatCache.get(dateString);
+  }
+  
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { 
+  const formatted = date.toLocaleDateString('en-US', { 
     year: 'numeric', 
     month: 'long', 
     day: 'numeric' 
   });
+  
+  dateFormatCache.set(dateString, formatted);
+  return formatted;
 }
 
-// Show error message
+// Show error message (optimized)
 function showError(message) {
   const errorDiv = document.createElement('div');
   errorDiv.innerHTML = `
@@ -269,8 +372,30 @@ function showError(message) {
       ${message}
     </div>
   `;
-  const mapSection = document.getElementById('memory-map-section');
+  
+  const mapSection = cachedElements.mapSection || document.getElementById('memory-map-section');
   if (mapSection) {
     mapSection.appendChild(errorDiv);
+  }
+}
+
+// Cleanup function for better memory management
+function cleanup() {
+  // Clear all timeouts
+  bounceTimeouts.forEach(timeout => clearTimeout(timeout));
+  bounceTimeouts.clear();
+  
+  // Clear cached elements
+  cachedElements = {};
+  
+  // Clear date format cache if it gets too large
+  if (dateFormatCache.size > 100) {
+    dateFormatCache.clear();
+  }
+  
+  // Close any open info windows
+  if (currentInfoWindow) {
+    currentInfoWindow.close();
+    currentInfoWindow = null;
   }
 }
