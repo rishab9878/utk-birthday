@@ -684,8 +684,7 @@ function displayBotMessages() {
     "They will be delivered in 2 shipments...out of which 1 you will receive today throught Porter",
     "The one will be delivered by Delhivery",
     "Tracking ID: <span style='color:#ff87ab;font-weight:600'>TN123456789</span>", // Themed color
-    "Rishab has requested only you to open the gift hamper, not anyone else",
-    "So... what did you think of this web surprise Rishab made for you?"
+    "Rishab has requested only you to open the gift hamper, not anyone else"
   ];
 
   const chatMessages = document.getElementById('chat-messages');
@@ -712,6 +711,13 @@ function displayBotMessages() {
         // Log bot message to Google Sheet
         logChatToGoogleSheet(msg, 'bot');
 
+        // After the last message, show gift selection
+        if (index === messages.length - 1) {
+          setTimeout(() => {
+            showGiftSelection();
+          }, 1000);
+        }
+
       }, 1500);
     }, index * 2500);
   });
@@ -722,6 +728,273 @@ function createTypingIndicator() {
   div.classList.add('typing-indicator');
   div.innerHTML = '<span></span><span></span><span></span>';
   return div;
+}
+
+function showGiftSelection() {
+  const chatMessages = document.getElementById('chat-messages');
+  
+  // Add the question message
+  const questionElement = document.createElement('div');
+  questionElement.classList.add('message', 'bot-message');
+  questionElement.innerHTML = "Do you want to see the gift?";
+  chatMessages.appendChild(questionElement);
+  
+  // Log the question to Google Sheet
+  logChatToGoogleSheet("Do you want to see the gift?", 'bot');
+  
+  // Create gift selection buttons
+  const buttonContainer = document.createElement('div');
+  buttonContainer.classList.add('gift-selection-container');
+  buttonContainer.style.cssText = `
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    justify-content: center;
+  `;
+  
+  const yesButton = document.createElement('button');
+  yesButton.innerHTML = '✨ Yes';
+  yesButton.style.cssText = `
+    background: linear-gradient(135deg, #ff6b9d, #e25594);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(226, 85, 148, 0.3);
+  `;
+  yesButton.onclick = () => handleGiftSelection('yes', buttonContainer);
+  
+  const noButton = document.createElement('button');
+  noButton.innerHTML = '💔 No';
+  noButton.style.cssText = `
+    background: linear-gradient(135deg, #ffcce0, #ffa8cc);
+    color: #8b4c7a;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 204, 224, 0.4);
+  `;
+  noButton.onclick = () => handleGiftSelection('no', buttonContainer);
+  
+  // Add hover effects
+  yesButton.onmouseover = () => yesButton.style.transform = 'translateY(-2px)';
+  yesButton.onmouseout = () => yesButton.style.transform = 'translateY(0)';
+  noButton.onmouseover = () => noButton.style.transform = 'translateY(-2px)';
+  noButton.onmouseout = () => noButton.style.transform = 'translateY(0)';
+  
+  buttonContainer.appendChild(yesButton);
+  buttonContainer.appendChild(noButton);
+  chatMessages.appendChild(buttonContainer);
+  
+  // Scroll to bottom
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function handleGiftSelection(choice, buttonContainer) {
+  // Remove the button container
+  buttonContainer.remove();
+  
+  // Add user's choice as a message
+  addMessage(choice === 'yes' ? '✨ Yes' : '💔 No', 'user');
+  
+  if (choice === 'yes') {
+    // Show gift popup
+    setTimeout(() => {
+      showGiftPopup();
+    }, 500);
+  } else {
+    // Continue with original chatbot flow
+    setTimeout(() => {
+      const finalMessage = "So... what did you think of this web surprise Rishab made for you?";
+      addMessage(finalMessage, 'bot');
+    }, 1000);
+  }
+}
+
+function showGiftPopup() {
+  // Create gift popup modal
+  const modal = document.createElement('div');
+  modal.id = 'gift-popup-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  `;
+  
+  const popupContent = document.createElement('div');
+  popupContent.style.cssText = `
+    background: linear-gradient(135deg, #ffeef7, #ffe4f1);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(226, 85, 148, 0.3);
+    border: 2px solid #ffcce0;
+  `;
+  
+  // Close button
+  const closeButton = document.createElement('button');
+  closeButton.innerHTML = '✕';
+  closeButton.style.cssText = `
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #e25594;
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(226, 85, 148, 0.3);
+  `;
+  closeButton.onclick = closeGiftPopup;
+  closeButton.onmouseover = () => {
+    closeButton.style.background = '#d14080';
+    closeButton.style.transform = 'scale(1.1)';
+  };
+  closeButton.onmouseout = () => {
+    closeButton.style.background = '#e25594';
+    closeButton.style.transform = 'scale(1)';
+  };
+  
+  // Title
+  const title = document.createElement('h2');
+  title.innerHTML = '🎁 Your Special Gifts 🎁';
+  title.style.cssText = `
+    text-align: center;
+    color: #8b4c7a;
+    margin-bottom: 30px;
+    font-size: 28px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  `;
+  
+  // Videos container
+  const videosContainer = document.createElement('div');
+  videosContainer.style.cssText = `
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  `;
+  
+  // Gift 1 video
+  const gift1Container = document.createElement('div');
+  gift1Container.style.cssText = `
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(226, 85, 148, 0.15);
+    border: 1px solid #ffcce0;
+  `;
+  
+  const gift1Title = document.createElement('h3');
+  gift1Title.innerHTML = '💖 Gift 1';
+  gift1Title.style.cssText = `
+    color: #e25594;
+    margin-bottom: 15px;
+    font-size: 20px;
+  `;
+  
+  const gift1Video = document.createElement('video');
+  gift1Video.src = 'assets/gift1.mp4';
+  gift1Video.controls = true;
+  gift1Video.style.cssText = `
+    width: 300px;
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  `;
+  
+  gift1Container.appendChild(gift1Title);
+  gift1Container.appendChild(gift1Video);
+  
+  // Gift 2 video
+  const gift2Container = document.createElement('div');
+  gift2Container.style.cssText = `
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(226, 85, 148, 0.15);
+    border: 1px solid #ffcce0;
+  `;
+  
+  const gift2Title = document.createElement('h3');
+  gift2Title.innerHTML = '💝 Gift 2';
+  gift2Title.style.cssText = `
+    color: #e25594;
+    margin-bottom: 15px;
+    font-size: 20px;
+  `;
+  
+  const gift2Video = document.createElement('video');
+  gift2Video.src = 'assets/gift2.mp4';
+  gift2Video.controls = true;
+  gift2Video.style.cssText = `
+    width: 300px;
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  `;
+  
+  gift2Container.appendChild(gift2Title);
+  gift2Container.appendChild(gift2Video);
+  
+  videosContainer.appendChild(gift1Container);
+  videosContainer.appendChild(gift2Container);
+  
+  popupContent.appendChild(closeButton);
+  popupContent.appendChild(title);
+  popupContent.appendChild(videosContainer);
+  modal.appendChild(popupContent);
+  document.body.appendChild(modal);
+  
+  // Show modal with animation
+  setTimeout(() => {
+    modal.style.opacity = '1';
+  }, 10);
+}
+
+function closeGiftPopup() {
+  const modal = document.getElementById('gift-popup-modal');
+  if (modal) {
+    modal.style.opacity = '0';
+    setTimeout(() => {
+      modal.remove();
+      // Continue with chatbot after closing
+      setTimeout(() => {
+        const finalMessage = "So... what did you think of this web surprise Rishab made for you?";
+        addMessage(finalMessage, 'bot');
+      }, 500);
+    }, 300);
+  }
 }
 
 function sendMessage() {
