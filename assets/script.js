@@ -1142,7 +1142,7 @@ function createHeartParticle(x, y) {
   container.appendChild(heart);
   setTimeout(() => {
     heart.remove();
-  }, 2000);
+  }, 1000);
 }
 
 // Add to your existing nextPage() function:
