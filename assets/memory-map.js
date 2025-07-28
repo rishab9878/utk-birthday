@@ -1,16 +1,16 @@
 const memoryData = [
   {
     "id": 1,
-    "title": "Where We First Met 💕",
+    "title": "Lovers Fest 💕",
     "coordinates": [12.93417794756412, 77.61595810429198],
     "date": "2025-02-16",
     "category": "Lovers Fest",
-    "description": "This is where our love story began! I was so nervous but you made me feel at ease immediately. I knew you were special from that first smile.",
+    "description": "This is where everything started! I was so nervous but you made me feel at ease immediately. I knew you were special from that first smile.",
     "photos": ["1.jpg", "2.jpg"]
   },
   {
     "id": 2,
-    "title": "Our First Official Date and first kiss",
+    "title": "Jamming Goat",
     "coordinates": [12.965428731499749, 77.64177062583153],
     "date": "2025-02-22",
     "category": "Jamming Goat",
