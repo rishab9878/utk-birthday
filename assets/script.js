@@ -1154,42 +1154,53 @@ nextPage("surprise");
 }
 
 
-// Batch DOM insertion for sparkles
-const sparkleFragment = document.createDocumentFragment();
-for (let i = 0; i < 30; i++) {
-  const sparkle = document.createElement('div');
-  sparkle.className = 'sparkle';
-  sparkle.style.left = Math.random() * 100 + 'vw';
-  sparkle.style.top = Math.random() * 100 + 'vh';
-  sparkle.style.animationDelay = (Math.random() * 5) + 's';
-  sparkleFragment.appendChild(sparkle);
-}
-document.body.appendChild(sparkleFragment);
 
+// Optimize: Defer sparkle DOM insertion and wish form event binding until DOMContentLoaded
+document.addEventListener("DOMContentLoaded", function () {
+  // Sparkles
+  const sparkleFragment = document.createDocumentFragment();
+  for (let i = 0; i < 30; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    sparkle.style.left = Math.random() * 100 + 'vw';
+    sparkle.style.top = Math.random() * 100 + 'vh';
+    sparkle.style.animationDelay = (Math.random() * 5) + 's';
+    sparkleFragment.appendChild(sparkle);
+  }
+  document.body.appendChild(sparkleFragment);
 
-function updateLoveMeter(progress) {
-  const fill = document.getElementById('heart-fill');
-  fill.style.width = progress + '%';
-}
-
-document.getElementById("wishForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  const wish = this.wish.value;
-
-  fetch("https://script.google.com/macros/s/AKfycby8IA3jgSSW8WSegW1X8mP5hzITx06TPjDNWoylAb2xSNZ0m33cQpFG8nCxjWR73vV2/exec", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: `wish=${encodeURIComponent(wish)}`
-  })
-    .then(() => {
-      document.getElementById("wishStatus").innerText = "The universe received your wish 🌠";
-      this.reset();
-    })
-    .catch(() => {
-      document.getElementById("wishStatus").innerText = "Something went wrong. Try again!";
+  // Wish form event binding
+  const wishForm = document.getElementById("wishForm");
+  if (wishForm) {
+    wishForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const wish = this.wish.value;
+      fetch("https://script.google.com/macros/s/AKfycby8IA3jgSSW8WSegW1X8mP5hzITx06TPjDNWoylAb2xSNZ0m33cQpFG8nCxjWR73vV2/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `wish=${encodeURIComponent(wish)}`
+      })
+        .then(() => {
+          document.getElementById("wishStatus").innerText = "The universe received your wish 🌠";
+          this.reset();
+        })
+        .catch(() => {
+          document.getElementById("wishStatus").innerText = "Something went wrong. Try again!";
+        });
     });
+  }
 });
+
+
+
+// Optimize: Cache DOM lookup for love meter
+function updateLoveMeter(progress) {
+  if (!updateLoveMeter.fill) updateLoveMeter.fill = document.getElementById('heart-fill');
+  const fill = updateLoveMeter.fill;
+  if (fill) fill.style.width = progress + '%';
+}
+
+// Removed duplicate wishForm event binding (now handled in DOMContentLoaded)
  
 
 /*
@@ -1291,16 +1302,15 @@ function replayVideo() {
 }
 
 function addMessage(text, sender) {
-  const chatMessages = document.getElementById('chat-messages');
-  
+  // Cache chatMessages DOM lookup
+  if (!addMessage.chatMessages) addMessage.chatMessages = document.getElementById('chat-messages');
+  const chatMessages = addMessage.chatMessages;
+  if (!chatMessages) return;
   const messageElement = document.createElement('div');
   messageElement.classList.add('message', sender + '-message');
-  messageElement.innerHTML = text; // Use innerHTML to allow for themed spans in bot messages
-  
+  messageElement.innerHTML = text;
   chatMessages.appendChild(messageElement);
   chatMessages.scrollTop = chatMessages.scrollHeight;
-
-  // --- NEW: Log message to Google Sheet ---
   logChatToGoogleSheet(text, sender);
 }
 
@@ -1334,66 +1344,53 @@ function logChatToGoogleSheet(message, sender) {
 
 
 function respondToUser(message) {
-  const chatMessages = document.getElementById('chat-messages');
-  
+  // Cache chatMessages DOM lookup
+  if (!respondToUser.chatMessages) respondToUser.chatMessages = document.getElementById('chat-messages');
+  const chatMessages = respondToUser.chatMessages;
+  if (!chatMessages) return;
   // Show typing indicator
   const typingIndicator = createTypingIndicator();
   chatMessages.appendChild(typingIndicator);
   chatMessages.scrollTop = chatMessages.scrollHeight;
-  
   setTimeout(() => {
-    // Remove typing indicator
     chatMessages.removeChild(typingIndicator);
-    
-    // Generate response
     let response;
     const lowerMessage = message.toLowerCase();
-    
     if (waitingForRishabMessage) {
-  const rishabResponses = [
-    `Aww, that's so sweet! 💖 I'll make sure Rishab sees your message`,
-    `Your words are going to make Rishab’s day! ✨`,
-    `What a beautiful message! 🥺 I recorded this for Rishab`,
-    `Rishab will be so touched reading this! 💕`
-  ];
-  response = rishabResponses[Math.floor(Math.random() * rishabResponses.length)];
-  waitingForRishabMessage = false;
-
-  // Add your thank-you + invite to play "Let's Remember"
-  setTimeout(() => {
-    addMessage(response, 'bot'); // This will also log to sheet
-
-    // Thank you message
-    setTimeout(() => {
-      addMessage("Before we wrap this up... wanna play something sweet? 💭 It’s called Let's Remember — where you finish our memories!", 'bot'); // This will also log to sheet
-
-      // Start the memory game
-      isInLetsRemember = true;
-      letsRememberStep = 0;
-      memoryAnswers = [];
-
+      const rishabResponses = [
+        `Aww, that's so sweet! 💖 I'll make sure Rishab sees your message`,
+        `Your words are going to make Rishab’s day! ✨`,
+        `What a beautiful message! 🥺 I recorded this for Rishab`,
+        `Rishab will be so touched reading this! 💕`
+      ];
+      response = rishabResponses[Math.floor(Math.random() * rishabResponses.length)];
+      waitingForRishabMessage = false;
       setTimeout(() => {
-        addMessage(letsRememberFlow[letsRememberStep], 'bot'); // This will also log to sheet
-      }, 1500);
-    }, 1500);
-
-  }, 100); // initial bot response delay
-
-  return;
-}
+        addMessage(response, 'bot');
+        setTimeout(() => {
+          addMessage("Before we wrap this up... wanna play something sweet? 💭 It’s called Let's Remember — where you finish our memories!", 'bot');
+          isInLetsRemember = true;
+          letsRememberStep = 0;
+          memoryAnswers = [];
+          setTimeout(() => {
+            addMessage(letsRememberFlow[letsRememberStep], 'bot');
+          }, 1500);
+        }, 1500);
+      }, 100);
+      return;
+    }
     else if (lowerMessage.includes('i miss you') || lowerMessage.includes('i miss him')) {
       response = "I remember it all too well... Rishab misses you more 💔";
     }
-
     else if (lowerMessage.includes('i love you') || lowerMessage.includes('i love him') || lowerMessage.includes('i love rishab')) {
       response = "This love is good. This love is bad. This love was yours 💕";
-      }
+    }
     else if (lowerMessage.includes('i am sorry') || lowerMessage.includes("i'm sorry") || lowerMessage.includes('sorry')) {
       response = "It's okay. You're human. So was Rishab — when he waited, when he begged, and when he finally let go 🥺";
-    }  
+    }
     else if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
       response = "You're very welcome! I'm so glad you liked it! ❤️";
-    } 
+    }
     else if (lowerMessage.includes('love') || lowerMessage.includes('amazing') || lowerMessage.includes('awesome')) {
       response = "Yay! That makes me so happy to hear! Rishab put his heart into every detail of this surprise! 💝. Would you like to add a personal message for him?";
       waitingForRishabMessage = true;
@@ -1409,34 +1406,32 @@ function respondToUser(message) {
       response = "Your words mean so much! 💌 Would you like me to pass along a special message to Rishab about how this made you feel?";
       waitingForRishabMessage = true;
     }
-    
-    addMessage(response, 'bot'); // This will also log to sheet
+    addMessage(response, 'bot');
   }, 1500);
 }
 
 
 // Update the showSlide function to handle the new design
 function showSlide(index) {
-  const img = document.getElementById("slide-img");
-  const video = document.getElementById("slide-video");
-  const caption = document.getElementById("slide-caption");
+  // Cache DOM lookups for slideshow
+  if (!showSlide.img) showSlide.img = document.getElementById("slide-img");
+  if (!showSlide.video) showSlide.video = document.getElementById("slide-video");
+  if (!showSlide.caption) showSlide.caption = document.getElementById("slide-caption");
+  const img = showSlide.img;
+  const video = showSlide.video;
+  const caption = showSlide.caption;
   const slide = slides[index];
-  
-  // Update progress dots
   updateProgressDots(index);
-
   img.style.opacity = 0;
   video.style.opacity = 0;
-
   setTimeout(() => {
     if (slide.type === "photo") {
       img.src = slide.src;
+      img.loading = "lazy";
       img.hidden = false;
       video.hidden = true;
       caption.textContent = slide.caption;
       img.style.opacity = 1;
-      
-      // Add subtle animation
       img.style.transform = "scale(0.95)";
       setTimeout(() => {
         img.style.transition = "transform 0.5s ease";
@@ -1451,13 +1446,10 @@ function showSlide(index) {
       video.autoplay = true;
       video.muted = true;
       video.loop = false;
-
       video.oncanplay = () => {
         setTimeout(() => {
           video.play();
           video.style.opacity = 1;
-          
-          // Add subtle animation
           video.style.transform = "scale(0.95)";
           setTimeout(() => {
             video.style.transition = "transform 0.5s ease";
@@ -1465,12 +1457,10 @@ function showSlide(index) {
           }, 50);
         }, 100);
       };
-      
-      clearInterval(autoSlideTimer); // Pause for video
+      clearInterval(autoSlideTimer);
       video.onended = () => {
         const audio = document.getElementById("bg-music");
         if (audio && audio.paused) audio.play();
-
         setTimeout(() => {
           currentSlide = (currentSlide + 1) % slides.length;
           showSlide(currentSlide);
@@ -1483,9 +1473,11 @@ function showSlide(index) {
 
 // Add progress dots functionality
 function updateProgressDots(currentIndex) {
-  const dotsContainer = document.querySelector(".progress-dots");
+  // Cache progress dots container
+  if (!updateProgressDots.dotsContainer) updateProgressDots.dotsContainer = document.querySelector(".progress-dots");
+  const dotsContainer = updateProgressDots.dotsContainer;
+  if (!dotsContainer) return;
   dotsContainer.innerHTML = "";
-  
   slides.forEach((_, index) => {
     const dot = document.createElement("div");
     dot.className = "progress-dot";
