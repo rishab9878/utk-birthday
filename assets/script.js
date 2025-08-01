@@ -28,6 +28,9 @@ const ResourceLoader = {
   }
 };
 
+// Preload gift videos immediately
+ResourceLoader.preloadVideos(['assets/gift1.mp4', 'assets/gift2.mp4']);
+
 let isInLetsRemember = false;
 let letsRememberStep = 0;
 let memoryAnswers = [];
@@ -965,7 +968,8 @@ function showGiftPopup() {
   `;
   
   const gift1Video = document.createElement('video');
-  gift1Video.src = 'assets/gift1.mp4', loading="lazy";
+  gift1Video.src = 'assets/gift1.mp4';
+  gift1Video.preload = 'auto';
   gift1Video.controls = true;
   gift1Video.style.cssText = `
     width: 300px;
@@ -1020,7 +1024,8 @@ function showGiftPopup() {
   `;
   
   const gift2Video = document.createElement('video');
-  gift2Video.src = 'assets/gift2.mp4', loading="lazy";
+  gift2Video.src = 'assets/gift2.mp4';
+  gift2Video.preload = 'auto';
   gift2Video.controls = true;
   gift2Video.style.cssText = `
     width: 300px;
