@@ -965,7 +965,7 @@ function showGiftPopup() {
   `;
   
   const gift1Video = document.createElement('video');
-  gift1Video.src = 'assets/gift1.mp4';
+  gift1Video.src = 'assets/gift1.mp4', loading="lazy";
   gift1Video.controls = true;
   gift1Video.style.cssText = `
     width: 300px;
@@ -1020,7 +1020,7 @@ function showGiftPopup() {
   `;
   
   const gift2Video = document.createElement('video');
-  gift2Video.src = 'assets/gift2.mp4';
+  gift2Video.src = 'assets/gift2.mp4', loading="lazy";
   gift2Video.controls = true;
   gift2Video.style.cssText = `
     width: 300px;
