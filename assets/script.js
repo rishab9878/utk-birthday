@@ -1617,7 +1617,7 @@ function verifyPassword() {
   if (!letterPassword) return;
   
   const entered = letterPassword.value.trim();
-  const correct = "1984"; // 🔒 Replace this with your actual password
+  const correct = "8917515075"; // 🔒 Replace this with your actual password
 
   if (entered === correct) {
     closePasswordModal();
