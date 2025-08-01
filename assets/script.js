@@ -242,28 +242,28 @@ if (timelineStep) timelineStep.classList.add("active");
 const quizData = [
   {
     question: "What did I notice about you in the first sight when we met?",
-    options: ["👀 Eyes", "👗 Outfit", "😊 Smile", "🎤 Voice"],
-    answer: "👗 Outfit"
+    options: ["Eyes", "Outfit", "Smile", "Voice"],
+    answer: "Outfit"
   },
   {
     question: "Where did we go after the Lover Fest?",
-    options: ["🍔 Burger King", "☕ Starbucks", "🍟 McDonalds", "🏠 Home"],
-    answer: "🍟 McDonalds"
+    options: ["Burger King", "Starbucks", "McDonalds", "Home"],
+    answer: "McDonalds"
   },
   {
     question: "Where did we go for our first bike ride?",
-    options: ["🌄 Sholay shooting spot", "🥤 Philly's", "🍰 A cute cafe next to highway", "🏙️ HSR"],
-    answer: "🍰 A cute cafe next to highway"
+    options: ["Sholay shooting spot", "Philly's", "A cute cafe next to highway", "HSR"],
+    answer: "A cute cafe next to highway"
   },
   {
     question: "What song would always remind me of you?",
-    options: ["✨ Enchanted", "💖 Lover", "🌅 Daylight", "🎸 Fearless"],
-    answer: "💖 Lover"
+    options: ["Enchanted", "Lover", "Daylight", "Fearless"],
+    answer: "Lover"
   },
   {
     question: "Our cute fights are about?",
-    options: ["🍕 Food", "🌧️ Mood", "📱 Texts", "👚 Outfits"],
-    answer: "🌧️ Mood"
+    options: ["Food", "Mood", "Texts", "Outfits"],
+    answer: "Mood"
   }
 ];
 
@@ -628,22 +628,64 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Background music volume management utility
+const BackgroundMusicManager = {
+  originalVolume: 0.5,
+  loweredVolume: 0,
+  
+  init() {
+    const bgMusic = document.getElementById("bg-music");
+    if (bgMusic) {
+      bgMusic.volume = this.originalVolume;
+    }
+  },
+  
+  lowerVolume() {
+    const bgMusic = document.getElementById("bg-music");
+    if (bgMusic) {
+      bgMusic.volume = this.loweredVolume;
+    }
+  },
+  
+  restoreVolume() {
+    const bgMusic = document.getElementById("bg-music");
+    if (bgMusic) {
+      bgMusic.volume = this.originalVolume;
+    }
+  }
+};
+
+// Initialize background music volume
+BackgroundMusicManager.init();
+
 const surpriseVideo = document.getElementById("surprise-video");
 const bgMusic = document.getElementById("bg-music");
 
-// Optional: Set initial volume
-bgMusic.volume = 0.5;
+// Listen for volume/mute changes on surprise video
+if (surpriseVideo) {
+  surpriseVideo.addEventListener("volumechange", () => {
+    if (!surpriseVideo.muted && surpriseVideo.volume > 0) {
+      BackgroundMusicManager.lowerVolume();
+    } else {
+      BackgroundMusicManager.restoreVolume();
+    }
+  });
 
-// Listen for volume/mute changes
-surpriseVideo.addEventListener("volumechange", () => {
-  if (!surpriseVideo.muted && surpriseVideo.volume > 0) {
-    // Lower bg music when video is unmuted
-    bgMusic.volume = 0.15;
-  } else {
-    // Restore bg music volume when video is muted again
-    bgMusic.volume = 0.5;
-  }
-});
+  // Also handle play/pause events
+  surpriseVideo.addEventListener("play", () => {
+    if (!surpriseVideo.muted) {
+      BackgroundMusicManager.lowerVolume();
+    }
+  });
+
+  surpriseVideo.addEventListener("pause", () => {
+    BackgroundMusicManager.restoreVolume();
+  });
+
+  surpriseVideo.addEventListener("ended", () => {
+    BackgroundMusicManager.restoreVolume();
+  });
+}
 
 function showGlitchPopup() {
   const popup = document.getElementById("glitch-popup");
@@ -680,11 +722,11 @@ function displayBotMessages() {
   const messages = [
     "Heyy Utk! It's me Taylor",
     "Hope you loved this little surprise! But guess what? This isn't the end",
-    "A Super cute gift hamper tailored especially for you is already on its way to your address",
-    "They will be delivered in 2 shipments...out of which 1 you will receive today throught Porter",
-    "The one will be delivered by Delhivery",
-    "Tracking ID: <span style='color:#ff87ab;font-weight:600'>TN123456789</span>", // Themed color
-    "Rishab has requested only you to open the gift hamper, not anyone else"
+    "A Super cute gift hamper tay-lored especially for you is already on its way to your address",
+    "They will be delivered in 2 shipments...out of which one hamper you will receive today through Porter",
+    "The other one will be delivered by Delhivery",
+    "Tracking ID: <span style='color:#ff87ab;font-weight:600'>2827769099972</span>", // Themed color
+    "Rishab wants you to open the gift hamper, not anyone else"
   ];
 
   const chatMessages = document.getElementById('chat-messages');
@@ -747,16 +789,16 @@ function showGiftSelection() {
   buttonContainer.classList.add('gift-selection-container');
   buttonContainer.style.cssText = `
     display: flex;
-    gap: 10px;
-    margin: 10px 0;
+    gap: 0px;
+    margin: 5px 0;
     justify-content: center;
   `;
   
   const yesButton = document.createElement('button');
-  yesButton.innerHTML = '✨ Yes';
+  yesButton.innerHTML = 'Yes';
   yesButton.style.cssText = `
-    background: linear-gradient(135deg, #ff6b9d, #e25594);
-    color: white;
+    background: linear-gradient(135deg, #ffcce0, #ffa8cc);
+    color: #181616ff;
     border: none;
     padding: 12px 24px;
     border-radius: 25px;
@@ -769,10 +811,10 @@ function showGiftSelection() {
   yesButton.onclick = () => handleGiftSelection('yes', buttonContainer);
   
   const noButton = document.createElement('button');
-  noButton.innerHTML = '💔 No';
+  noButton.innerHTML = 'No';
   noButton.style.cssText = `
     background: linear-gradient(135deg, #ffcce0, #ffa8cc);
-    color: #8b4c7a;
+    color: #181616ff;
     border: none;
     padding: 12px 24px;
     border-radius: 25px;
@@ -932,6 +974,29 @@ function showGiftPopup() {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   `;
   
+  // Add background music management for gift1 video
+  gift1Video.addEventListener("play", () => {
+    if (!gift1Video.muted) {
+      BackgroundMusicManager.lowerVolume();
+    }
+  });
+  
+  gift1Video.addEventListener("pause", () => {
+    BackgroundMusicManager.restoreVolume();
+  });
+  
+  gift1Video.addEventListener("ended", () => {
+    BackgroundMusicManager.restoreVolume();
+  });
+  
+  gift1Video.addEventListener("volumechange", () => {
+    if (!gift1Video.muted && gift1Video.volume > 0 && !gift1Video.paused) {
+      BackgroundMusicManager.lowerVolume();
+    } else {
+      BackgroundMusicManager.restoreVolume();
+    }
+  });
+  
   gift1Container.appendChild(gift1Title);
   gift1Container.appendChild(gift1Video);
   
@@ -964,6 +1029,29 @@ function showGiftPopup() {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   `;
   
+  // Add background music management for gift2 video
+  gift2Video.addEventListener("play", () => {
+    if (!gift2Video.muted) {
+      BackgroundMusicManager.lowerVolume();
+    }
+  });
+  
+  gift2Video.addEventListener("pause", () => {
+    BackgroundMusicManager.restoreVolume();
+  });
+  
+  gift2Video.addEventListener("ended", () => {
+    BackgroundMusicManager.restoreVolume();
+  });
+  
+  gift2Video.addEventListener("volumechange", () => {
+    if (!gift2Video.muted && gift2Video.volume > 0 && !gift2Video.paused) {
+      BackgroundMusicManager.lowerVolume();
+    } else {
+      BackgroundMusicManager.restoreVolume();
+    }
+  });
+  
   gift2Container.appendChild(gift2Title);
   gift2Container.appendChild(gift2Video);
   
@@ -985,6 +1073,9 @@ function showGiftPopup() {
 function closeGiftPopup() {
   const modal = document.getElementById('gift-popup-modal');
   if (modal) {
+    // Restore background music volume when closing popup
+    BackgroundMusicManager.restoreVolume();
+    
     modal.style.opacity = '0';
     setTimeout(() => {
       modal.remove();
@@ -1410,6 +1501,9 @@ function cleanup() {
     video.pause();
     video.currentTime = 0;
   });
+  
+  // Restore background music volume
+  BackgroundMusicManager.restoreVolume();
 }
 
 
