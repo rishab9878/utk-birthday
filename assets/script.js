@@ -2,12 +2,44 @@ const DOMCache = {
   elements: new Map(),
   get(id) {
     if (!this.elements.has(id)) {
-      this.elements.set(id, document.getElementById(id));
+      const element = document.getElementById(id);
+      if (element) {
+        this.elements.set(id, element);
+      }
     }
     return this.elements.get(id);
   },
+  getBySelector(selector) {
+    if (!this.elements.has(selector)) {
+      const element = document.querySelector(selector);
+      if (element) {
+        this.elements.set(selector, element);
+      }
+    }
+    return this.elements.get(selector);
+  },
+  getAllBySelector(selector) {
+    return document.querySelectorAll(selector);
+  },
   clear() {
     this.elements.clear();
+  },
+  // Pre-cache commonly used elements
+  preCache() {
+    const commonElements = [
+      'slide-img', 'slide-video', 'slide-caption', 'bg-music',
+      'chat-messages', 'user-input', 'chatbot', 'quiz-box', 'quiz-end',
+      'final-score', 'question-text', 'options', 'feedback',
+      'quizProgressBar', 'question-counter', 'passwordModal',
+      'letterPassword', 'wrongPass', 'secretLetter'
+    ];
+    
+    commonElements.forEach(id => this.get(id));
+    
+    // Cache common selectors
+    this.getBySelector('.progress-dots');
+    this.getBySelector('.hearts');
+    this.getBySelector('.floating-lyrics');
   }
 };
 
@@ -72,13 +104,15 @@ const slides = [
 ];
 
 function showSlide(index) {
-  const img = document.getElementById("slide-img");
-  const video = document.getElementById("slide-video");
-  const caption = document.getElementById("slide-caption");
+  const img = DOMCache.get("slide-img");
+  const video = DOMCache.get("slide-video");
+  const caption = DOMCache.get("slide-caption");
   const slide = slides[index];
 
   // Update progress dots
   updateProgressDots(index);
+
+  if (!img || !video || !caption) return;
 
   img.style.opacity = 0;
   video.style.opacity = 0;
@@ -127,7 +161,7 @@ function showSlide(index) {
 
       clearInterval(autoSlideTimer); // Pause for video
       video.onended = () => {
-        const audio = document.getElementById("bg-music");
+        const audio = DOMCache.get("bg-music");
         if (audio && audio.paused) audio.play();
 
         setTimeout(() => {
@@ -196,12 +230,12 @@ function nextPage(id) {
   nextPage('memory-map');
 }
 
-  const surpriseVideo = document.getElementById("surprise-video");
+  const surpriseVideo = DOMCache.get("surprise-video");
   if (surpriseVideo) {
     surpriseVideo.pause();
   }
 
-  const next = document.getElementById(id);
+  const next = DOMCache.get(id);
   if (next) {
     next.style.display = "block"; // show target
     next.classList.add("active");
@@ -226,19 +260,22 @@ function nextPage(id) {
   if (id === "goodbye") {
     // Auto-open chatbot on goodbye page load
     setTimeout(() => {
-      document.getElementById('chatbot').style.display = 'flex';
-      displayBotMessages();
+      const chatbot = DOMCache.get('chatbot');
+      if (chatbot) {
+        chatbot.style.display = 'flex';
+        displayBotMessages();
+      }
     }, 1500);
   }
 
-  const audio = document.getElementById("bg-music");
+  const audio = DOMCache.get("bg-music");
   if (audio && audio.paused) {
     audio.play().catch(e => console.warn("Autoplay blocked", e));
   }
 
   // Highlight timeline step
-document.querySelectorAll(".timeline-step").forEach(step => step.classList.remove("active"));
-const timelineStep = document.getElementById(`step-${id}`);
+DOMCache.getAllBySelector(".timeline-step").forEach(step => step.classList.remove("active"));
+const timelineStep = DOMCache.get(`step-${id}`);
 if (timelineStep) timelineStep.classList.add("active");
 
 }
@@ -278,14 +315,21 @@ let score = 0;
 
 function showQuestion() {
   const q = quizData[currentQuestion];
-  document.getElementById("question-text").innerText = q.question;
-  const optionsContainer = document.getElementById("options");
+  const questionText = DOMCache.get("question-text");
+  const optionsContainer = DOMCache.get("options");
+  const feedback = DOMCache.get("feedback");
+  const progressBar = DOMCache.get("quizProgressBar");
+  const questionCounter = DOMCache.get("question-counter");
+
+  if (!questionText || !optionsContainer || !feedback || !progressBar || !questionCounter) return;
+
+  questionText.innerText = q.question;
   optionsContainer.innerHTML = "";
-  document.getElementById("feedback").innerText = "";
+  feedback.innerText = "";
 
   const progress = ((currentQuestion) / quizData.length) * 100;
-  document.getElementById("quizProgressBar").style.width = `${progress}%`;
-  document.getElementById("question-counter").innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
+  progressBar.style.width = `${progress}%`;
+  questionCounter.innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
 
 
   q.options.forEach(option => {
@@ -298,16 +342,20 @@ function showQuestion() {
 }
 
 function checkAnswer(button, correctAnswer) {
-  const buttons = document.querySelectorAll(".option-btn");
+  const buttons = DOMCache.getAllBySelector(".option-btn");
+  const feedback = DOMCache.get("feedback");
+  
+  if (!feedback) return;
+  
   buttons.forEach(btn => btn.disabled = true);
 
   if (button.innerText === correctAnswer) {
     button.classList.add("correct");
-    document.getElementById("feedback").innerText = "Yay! You're right! 💖";
+    feedback.innerText = "Yay! You're right! 💖";
     score++;
   } else {
     button.classList.add("wrong");
-    document.getElementById("feedback").innerText = `Oops! Correct: ${correctAnswer}`;
+    feedback.innerText = `Oops! Correct: ${correctAnswer}`;
     buttons.forEach(btn => {
       if (btn.innerText === correctAnswer) btn.classList.add("correct");
     });
@@ -324,17 +372,23 @@ function checkAnswer(button, correctAnswer) {
 }
 
 function showQuizEnd() {
-  document.getElementById("quiz-box").style.display = "none";
-  document.getElementById("quiz-end").style.display = "block";
-  document.getElementById("final-score").innerText = score;
+  const quizBox = DOMCache.get("quiz-box");
+  const quizEnd = DOMCache.get("quiz-end");
+  const finalScore = DOMCache.get("final-score");
+  const progressBar = DOMCache.get("quizProgressBar");
+  const questionCounter = DOMCache.get("question-counter");
+  const rewardMsg = DOMCache.get("reward-message");
+  const rewardGift = DOMCache.get("reward-gift");
 
-  document.getElementById("quizProgressBar").style.width = `100%`;
-document.getElementById("question-counter").innerText = `Quiz Complete 🎉`;
+  if (!quizBox || !quizEnd || !finalScore || !progressBar || !questionCounter || !rewardMsg || !rewardGift) return;
 
+  quizBox.style.display = "none";
+  quizEnd.style.display = "block";
+  finalScore.innerText = score;
 
-  
-  const rewardMsg = document.getElementById("reward-message");
-  const rewardGift = document.getElementById("reward-gift");
+  progressBar.style.width = `100%`;
+  questionCounter.innerText = `Quiz Complete 🎉`;
+
   rewardMsg.innerHTML = "";
   rewardGift.innerHTML = "";
 
@@ -359,7 +413,11 @@ document.getElementById("question-counter").innerText = `Quiz Complete 🎉`;
 // ------------------------ CONFETTI + SURPRISE ------------------------
 
 function claimSurprise() {
-  const container = document.getElementById("confetti");
+  const container = DOMCache.get("confetti");
+  const claimBtn = DOMCache.get("claimBtn");
+
+  if (!container || !claimBtn) return;
+
   container.innerHTML = "";
 
   const emojis = ["💖", "🎉", "💫", "🥳", "🌸", "✨", "🩷"];
@@ -378,8 +436,8 @@ function claimSurprise() {
     container.appendChild(span);
   }
 
-  document.getElementById("claimBtn").disabled = true;
-  document.getElementById("claimBtn").innerText = "🎊 Claimed!";
+  claimBtn.disabled = true;
+  claimBtn.innerText = "🎊 Claimed!";
 
   setTimeout(() => {
     nextPage("surprise-pr");
@@ -389,12 +447,13 @@ function claimSurprise() {
 
 
 function hideSurpriseText() {
-  const text = document.getElementById("celebrate-text");
+  const text = DOMCache.get("celebrate-text");
   if (text) text.style.display = "none";
 }
 
 function replaySurprise() {
-  const video = document.getElementById("surprise-video");
+  const video = DOMCache.get("surprise-video");
+  if (!video) return;
   video.currentTime = 0;
   video.play();
 }
@@ -402,16 +461,18 @@ function replaySurprise() {
 // ------------------------ LETTER POPUPS ------------------------
 
 function openLetter(id) {
-  document.getElementById(id).style.display = "block";
+  const letter = DOMCache.get(id);
+  if (letter) letter.style.display = "block";
 }
 function closeLetter(id) {
-  document.getElementById(id).style.display = "none";
+  const letter = DOMCache.get(id);
+  if (letter) letter.style.display = "none";
 }
 
 // ------------------------ HEART PARTICLES ------------------------
 
 window.addEventListener("load", () => {
-  const canvas = document.getElementById("heartCanvas");
+  const canvas = DOMCache.get("heartCanvas");
   if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
@@ -487,7 +548,7 @@ window.addEventListener("load", () => {
 
 // ------------------------ TOUCH SWIPE FOR SLIDESHOW (Optimized) ------------------------
 (function optimizeSlideshowTouch() {
-  const slideshowElement = document.getElementById("slideshow");
+  const slideshowElement = DOMCache.get("slideshow");
   if (!slideshowElement) return;
   let startX = 0;
   let isTouch = false;
@@ -525,8 +586,11 @@ window.addEventListener("load", () => {
 })();
 
 function openImageModal(src) {
-  const modal = document.getElementById("imageModal");
-  const modalImg = document.getElementById("modalImage");
+  const modal = DOMCache.get("imageModal");
+  const modalImg = DOMCache.get("modalImage");
+  
+  if (!modal || !modalImg) return;
+  
   modalImg.src = src;
   modal.style.display = "block";
   
@@ -542,7 +606,9 @@ function openImageModal(src) {
 }
 
 function closeImageModal() {
-  const modal = document.getElementById("imageModal");
+  const modal = DOMCache.get("imageModal");
+  if (!modal) return;
+  
   modal.style.transition = "all 0.3s ease";
   modal.style.opacity = "0";
   modal.style.transform = "scale(0.8)";
@@ -556,8 +622,8 @@ let waitingForRishabMessage = false; // State variable for chatbot
 
 // Enhanced surprise page animations
 function initSurpriseAnimations() {
-  const surpriseImages = document.querySelectorAll('.surprise-img');
-  const surpriseCenter = document.querySelector('.surprise-center');
+  const surpriseImages = DOMCache.getAllBySelector('.surprise-img');
+  const surpriseCenter = DOMCache.getBySelector('.surprise-center');
   
   // Add staggered entrance animations
   surpriseImages.forEach((img, index) => {
@@ -586,7 +652,7 @@ function initSurpriseAnimations() {
 
 // Add floating particles effect
 function createFloatingParticles() {
-  const surprisePage = document.getElementById('surprise');
+  const surprisePage = DOMCache.get('surprise');
   if (!surprisePage) return;
   
   const particles = ['💖', '✨', '🌸', '💫', '🎀', '💕'];
@@ -664,8 +730,8 @@ const BackgroundMusicManager = {
 // Initialize background music volume
 BackgroundMusicManager.init();
 
-const surpriseVideo = document.getElementById("surprise-video");
-const bgMusic = document.getElementById("bg-music");
+const surpriseVideo = DOMCache.get("surprise-video");
+const bgMusic = DOMCache.get("bg-music");
 
 // Listen for volume/mute changes on surprise video
 if (surpriseVideo) {
@@ -694,7 +760,7 @@ if (surpriseVideo) {
 }
 
 function showGlitchPopup() {
-  const popup = document.getElementById("glitch-popup");
+  const popup = DOMCache.get("glitch-popup");
   const messageElement = popup?.querySelector("p");
 
   const glitchMessages = [
@@ -714,13 +780,14 @@ function showGlitchPopup() {
 }
 
 function closeGlitchPopup() {
-  const popup = document.getElementById("glitch-popup");
+  const popup = DOMCache.get("glitch-popup");
   if (popup) popup.style.display = "none";
 }
 
 // ------------------------ CHATBOT FUNCTIONS ------------------------
 function toggleChat() {
-  const chatbot = document.getElementById('chatbot');
+  const chatbot = DOMCache.get('chatbot');
+  if (!chatbot) return;
   chatbot.style.display = chatbot.style.display === 'flex' ? 'none' : 'flex';
 }
 
@@ -735,7 +802,8 @@ function displayBotMessages() {
     "Rishab wants you to open the gift hamper, not anyone else"
   ];
 
-  const chatMessages = document.getElementById('chat-messages');
+  const chatMessages = DOMCache.get('chat-messages');
+  if (!chatMessages) return;
   
   messages.forEach((msg, index) => {
     setTimeout(() => {
@@ -779,7 +847,8 @@ function createTypingIndicator() {
 }
 
 function showGiftSelection() {
-  const chatMessages = document.getElementById('chat-messages');
+  const chatMessages = DOMCache.get('chat-messages');
+  if (!chatMessages) return;
   
   // Add the question message
   const questionElement = document.createElement('div');
@@ -1079,7 +1148,7 @@ function showGiftPopup() {
 }
 
 function closeGiftPopup() {
-  const modal = document.getElementById('gift-popup-modal');
+  const modal = DOMCache.get('gift-popup-modal');
   if (modal) {
     // Restore background music volume when closing popup
     BackgroundMusicManager.restoreVolume();
@@ -1097,9 +1166,12 @@ function closeGiftPopup() {
 }
 
 function sendMessage() {
-  const userInput = document.getElementById('user-input');
+  const userInput = DOMCache.get('user-input');
+  if (!userInput) return;
+  
   const message = userInput.value.trim();
-  document.getElementById('user-input').value = '';
+  userInput.value = '';
+  
   // 🎮 Check if currently in Let's Remember game
 if (isInLetsRemember) {
   // Show user's reply in the chat
@@ -1130,7 +1202,6 @@ if (isInLetsRemember) {
 
   // Add user message
   addMessage(message, 'user');
-  userInput.value = '';
   
   // Process and respond
   setTimeout(() => {
@@ -1145,8 +1216,10 @@ function handleKeyPress(event) {
 }
 
 function loadSurprise() {
-const loadingText = document.getElementById("loading-text");
-loadingText.style.display = "block";
+const loadingText = DOMCache.get("loading-text");
+if (loadingText) {
+  loadingText.style.display = "block";
+}
 
 setTimeout(() => {
 nextPage("surprise");
@@ -1157,6 +1230,9 @@ nextPage("surprise");
 
 // Optimize: Defer sparkle DOM insertion and wish form event binding until DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function () {
+  // Pre-cache commonly used elements
+  DOMCache.preCache();
+  
   // Sparkles
   const sparkleFragment = document.createDocumentFragment();
   for (let i = 0; i < 30; i++) {
@@ -1170,7 +1246,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.body.appendChild(sparkleFragment);
 
   // Wish form event binding
-  const wishForm = document.getElementById("wishForm");
+  const wishForm = DOMCache.get("wishForm");
   if (wishForm) {
     wishForm.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -1181,11 +1257,17 @@ document.addEventListener("DOMContentLoaded", function () {
         body: `wish=${encodeURIComponent(wish)}`
       })
         .then(() => {
-          document.getElementById("wishStatus").innerText = "The universe received your wish 🌠";
+          const wishStatus = DOMCache.get("wishStatus");
+          if (wishStatus) {
+            wishStatus.innerText = "The universe received your wish 🌠";
+          }
           this.reset();
         })
         .catch(() => {
-          document.getElementById("wishStatus").innerText = "Something went wrong. Try again!";
+          const wishStatus = DOMCache.get("wishStatus");
+          if (wishStatus) {
+            wishStatus.innerText = "Something went wrong. Try again!";
+          }
         });
     });
   }
@@ -1195,8 +1277,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Optimize: Cache DOM lookup for love meter
 function updateLoveMeter(progress) {
-  if (!updateLoveMeter.fill) updateLoveMeter.fill = document.getElementById('heart-fill');
-  const fill = updateLoveMeter.fill;
+  const fill = DOMCache.get('heart-fill');
   if (fill) fill.style.width = progress + '%';
 }
 
@@ -1210,8 +1291,11 @@ function checkSecret() {
   const password = prompt("Enter your phone number to unlock 💌:");
 
   if (password === "7076863754") {
-    document.getElementById("secretLetter").style.display = "block";
-    document.body.style.overflow = "hidden"; // prevent background scroll
+    const secretLetter = DOMCache.get("secretLetter");
+    if (secretLetter) {
+      secretLetter.style.display = "block";
+      document.body.style.overflow = "hidden"; // prevent background scroll
+    }
   } else if (password !== null) {
     alert("Oops! Wrong password 💔");
   }
@@ -1219,8 +1303,10 @@ function checkSecret() {
 
 // 🎥 Video Player Logic
 function initVideo() {
-  const video = document.getElementById('surprise-video');
-  const playHint = document.querySelector('.play-hint');
+  const video = DOMCache.get('surprise-video');
+  const playHint = DOMCache.getBySelector('.play-hint');
+  
+  if (!video) return;
   
   video.addEventListener('play', function() {
     video.classList.add('show');
@@ -1236,11 +1322,9 @@ function initVideo() {
 // ❤️ Heart Particles
 function createHeartParticle(x, y) {
   // Cache the container for heart particles
-  if (!createHeartParticle.container) {
-    createHeartParticle.container = document.querySelector('.hearts');
-  }
-  const container = createHeartParticle.container;
+  const container = DOMCache.getBySelector('.hearts');
   if (!container) return;
+  
   const heart = document.createElement('div');
   heart.innerHTML = '❤️';
   heart.style.position = 'absolute';
@@ -1260,38 +1344,43 @@ if (id === "surprise") {
   setTimeout(() => {
     initVideo();
     // Start floating lyrics animation (prevent multiple intervals)
-    const lyrics = document.querySelector('.floating-lyrics');
+    const lyrics = DOMCache.getBySelector('.floating-lyrics');
     if (window.lyricsInterval) clearInterval(window.lyricsInterval);
-    window.lyricsInterval = setInterval(() => {
-      const lines = [
-        "\"You're my, my, my, my... Lover\"",
-        "\"Can I go where you go?\"",
-        "\"Have I known you 20 seconds or 20 years?\"",
-        "\"I love you, ain't that the worst thing you ever heard?\""
-      ];
-      lyrics.textContent = lines[Math.floor(Math.random() * lines.length)];
-      lyrics.style.animation = 'none';
-      void lyrics.offsetWidth; // Trigger reflow
-      lyrics.style.animation = 'floatUp 3s infinite alternate';
-    }, 5000);
+    if (lyrics) {
+      window.lyricsInterval = setInterval(() => {
+        const lines = [
+          "\"You're my, my, my, my... Lover\"",
+          "\"Can I go where you go?\"",
+          "\"Have I known you 20 seconds or 20 years?\"",
+          "\"I love you, ain't that the worst thing you ever heard?\""
+        ];
+        lyrics.textContent = lines[Math.floor(Math.random() * lines.length)];
+        lyrics.style.animation = 'none';
+        void lyrics.offsetWidth; // Trigger reflow
+        lyrics.style.animation = 'floatUp 3s infinite alternate';
+      }, 5000);
+    }
   }, 100);
 }
 
 // 🎥 Fixed Replay Function 
 function replayVideo() {
-  const video = document.getElementById('surprise-video');
+  const video = DOMCache.get('surprise-video');
+  if (!video) return;
   
   // Reset and play
   video.currentTime = 0;
   video.play().catch(e => console.log("Auto-play prevented:", e));
   
   // Visual feedback
-  const btn = document.querySelector('[onclick="replayVideo()"]');
-  btn.innerHTML = '<span>🎀 Playing...</span>';
-  
-  setTimeout(() => {
-    btn.innerHTML = '<span>🔄 Replay</span>';
-  }, 1500);
+  const btn = DOMCache.getBySelector('[onclick="replayVideo()"]');
+  if (btn) {
+    btn.innerHTML = '<span>🎀 Playing...</span>';
+    
+    setTimeout(() => {
+      btn.innerHTML = '<span>🔄 Replay</span>';
+    }, 1500);
+  }
   
   // Restart heart particles if needed
   if (window.heartInterval) clearInterval(window.heartInterval);
@@ -1302,10 +1391,9 @@ function replayVideo() {
 }
 
 function addMessage(text, sender) {
-  // Cache chatMessages DOM lookup
-  if (!addMessage.chatMessages) addMessage.chatMessages = document.getElementById('chat-messages');
-  const chatMessages = addMessage.chatMessages;
+  const chatMessages = DOMCache.get('chat-messages');
   if (!chatMessages) return;
+  
   const messageElement = document.createElement('div');
   messageElement.classList.add('message', sender + '-message');
   messageElement.innerHTML = text;
@@ -1344,10 +1432,9 @@ function logChatToGoogleSheet(message, sender) {
 
 
 function respondToUser(message) {
-  // Cache chatMessages DOM lookup
-  if (!respondToUser.chatMessages) respondToUser.chatMessages = document.getElementById('chat-messages');
-  const chatMessages = respondToUser.chatMessages;
+  const chatMessages = DOMCache.get('chat-messages');
   if (!chatMessages) return;
+  
   // Show typing indicator
   const typingIndicator = createTypingIndicator();
   chatMessages.appendChild(typingIndicator);
@@ -1413,14 +1500,13 @@ function respondToUser(message) {
 
 // Update the showSlide function to handle the new design
 function showSlide(index) {
-  // Cache DOM lookups for slideshow
-  if (!showSlide.img) showSlide.img = document.getElementById("slide-img");
-  if (!showSlide.video) showSlide.video = document.getElementById("slide-video");
-  if (!showSlide.caption) showSlide.caption = document.getElementById("slide-caption");
-  const img = showSlide.img;
-  const video = showSlide.video;
-  const caption = showSlide.caption;
+  const img = DOMCache.get("slide-img");
+  const video = DOMCache.get("slide-video");
+  const caption = DOMCache.get("slide-caption");
   const slide = slides[index];
+  
+  if (!img || !video || !caption) return;
+  
   updateProgressDots(index);
   img.style.opacity = 0;
   video.style.opacity = 0;
@@ -1459,7 +1545,7 @@ function showSlide(index) {
       };
       clearInterval(autoSlideTimer);
       video.onended = () => {
-        const audio = document.getElementById("bg-music");
+        const audio = DOMCache.get("bg-music");
         if (audio && audio.paused) audio.play();
         setTimeout(() => {
           currentSlide = (currentSlide + 1) % slides.length;
@@ -1473,10 +1559,9 @@ function showSlide(index) {
 
 // Add progress dots functionality
 function updateProgressDots(currentIndex) {
-  // Cache progress dots container
-  if (!updateProgressDots.dotsContainer) updateProgressDots.dotsContainer = document.querySelector(".progress-dots");
-  const dotsContainer = updateProgressDots.dotsContainer;
+  const dotsContainer = DOMCache.getBySelector(".progress-dots");
   if (!dotsContainer) return;
+  
   dotsContainer.innerHTML = "";
   slides.forEach((_, index) => {
     const dot = document.createElement("div");
@@ -1497,7 +1582,7 @@ function cleanup() {
   if (window.lyricsInterval) clearInterval(window.lyricsInterval);
 
   // Pause all videos
-  document.querySelectorAll('video').forEach(video => {
+  DOMCache.getAllBySelector('video').forEach(video => {
     video.pause();
     video.currentTime = 0;
   });
@@ -1508,23 +1593,40 @@ function cleanup() {
 
 
 function openPasswordPrompt() {
-  document.getElementById("passwordModal").style.display = "block";
+  const passwordModal = DOMCache.get("passwordModal");
+  if (passwordModal) {
+    passwordModal.style.display = "block";
+  }
 }
 
 function closePasswordModal() {
-  document.getElementById("passwordModal").style.display = "none";
-  document.getElementById("letterPassword").value = "";
-  document.getElementById("wrongPass").style.display = "none";
+  const passwordModal = DOMCache.get("passwordModal");
+  const letterPassword = DOMCache.get("letterPassword");
+  const wrongPass = DOMCache.get("wrongPass");
+  
+  if (passwordModal) passwordModal.style.display = "none";
+  if (letterPassword) letterPassword.value = "";
+  if (wrongPass) wrongPass.style.display = "none";
 }
 
 function verifyPassword() {
-  const entered = document.getElementById("letterPassword").value.trim();
+  const letterPassword = DOMCache.get("letterPassword");
+  const secretLetter = DOMCache.get("secretLetter");
+  const wrongPass = DOMCache.get("wrongPass");
+  
+  if (!letterPassword) return;
+  
+  const entered = letterPassword.value.trim();
   const correct = "1984"; // 🔒 Replace this with your actual password
 
   if (entered === correct) {
     closePasswordModal();
-    document.getElementById("secretLetter").style.display = "block";
+    if (secretLetter) {
+      secretLetter.style.display = "block";
+    }
   } else {
-    document.getElementById("wrongPass").style.display = "block";
+    if (wrongPass) {
+      wrongPass.style.display = "block";
+    }
   }
 }
