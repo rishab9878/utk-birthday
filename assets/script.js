@@ -472,8 +472,8 @@ window.addEventListener("load", () => {
   }
 
   setInterval(() => {
-    for (let i = 0; i < 3; i++) createHeart();
-  }, 200);
+    for (let i = 0; i < 2; i++) createHeart();
+  }, 400);
 
   animate();
 });
