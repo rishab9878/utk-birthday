@@ -30,6 +30,9 @@ const ResourceLoader = {
 
 // Preload gift videos immediately
 ResourceLoader.preloadVideos(['assets/gift1.mp4', 'assets/gift2.mp4']);
+// Preload gift videos immediately
+ResourceLoader.preloadVideos(['media/photo1.jpg', 'media/photo2.jpg', 'media/photo3.jpg', 'media/photo4.jpg', 'media/photo5.jpg', 'media/video1.mp4', 'media/video2.mp4', 'media/video3.mp4', 'media/video4.mp4', 'media/video5.mp4']);
+
 
 let isInLetsRemember = false;
 let letsRememberStep = 0;
