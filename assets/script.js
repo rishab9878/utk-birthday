@@ -155,16 +155,14 @@ function nextSlide() {
 // ------------------------ PAGE TRANSITION ------------------------
 
 function nextPage(id) {
+  // Stop any ongoing timers/animations and pause media from previous page
+  try { cleanup(); } catch (e) { /* no-op */ }
   const pages = document.querySelectorAll(".page");
   pages.forEach(p => {
     p.classList.remove("active");
     p.style.display = "none"; // hide all
   });
 
-
-  function goToMemoryMap() {
-  nextPage('memory-map');
-}
 
   const surpriseVideo = DOMCache.get("surprise-video");
   if (surpriseVideo) {
@@ -183,7 +181,22 @@ function nextPage(id) {
     startAutoSlide();
   }
 
-  if (id === "quiz") showQuestion();
+  if (id === "quiz") {
+    // Reset quiz when entering
+    currentQuestion = 0;
+    score = 0;
+    const quizBox = DOMCache.get("quiz-box");
+    const quizEnd = DOMCache.get("quiz-end");
+    if (quizBox && quizEnd) {
+      quizBox.style.display = "block";
+      quizEnd.style.display = "none";
+    }
+    const progressBar = DOMCache.get("quizProgressBar");
+    const questionCounter = DOMCache.get("question-counter");
+    if (progressBar) progressBar.style.width = '0%';
+    if (questionCounter) questionCounter.innerText = `Question 1 of ${quizData.length}`;
+    showQuestion();
+  }
 
   // Initialize surprise page animations and effects
   if (id === "surprise") {
@@ -204,7 +217,8 @@ function nextPage(id) {
     setTimeout(() => {
       const chatbot = DOMCache.get('chatbot');
       if (chatbot) {
-        chatbot.style.display = 'flex';
+  chatbot.style.display = 'flex';
+  chatbot.classList.add('show');
         displayBotMessages();
       }
     }, 1500);
@@ -730,7 +744,9 @@ function closeGlitchPopup() {
 function toggleChat() {
   const chatbot = DOMCache.get('chatbot');
   if (!chatbot) return;
-  chatbot.style.display = chatbot.style.display === 'flex' ? 'none' : 'flex';
+  const willShow = chatbot.style.display !== 'flex';
+  chatbot.style.display = willShow ? 'flex' : 'none';
+  chatbot.classList.toggle('show', willShow);
 }
 
 function displayBotMessages() {
@@ -1174,6 +1190,13 @@ nextPage("surprise");
 document.addEventListener("DOMContentLoaded", function () {
   // Pre-cache commonly used elements
   DOMCache.preCache();
+  // Make timeline steps clickable for quick navigation
+  DOMCache.getAllBySelector('#timeline .timeline-step').forEach(step => {
+    step.addEventListener('click', () => {
+      const targetId = step.id?.replace('step-', '');
+      if (targetId) nextPage(targetId);
+    });
+  });
   
   // Sparkles
   const sparkleFragment = document.createDocumentFragment();
