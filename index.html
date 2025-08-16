@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Utkalika ❤️</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<!-- Timeline Progress Bar -->
+<div id="timeline">
+  <div class="timeline-step" id="step-intro">Intro</div>
+  <div class="timeline-step" id="step-slideshow">Moments</div>
+  <div class="timeline-step" id="step-loveNotes">Notes</div>
+  <div class="timeline-step" id="step-letters">Letters</div>
+  <div class="timeline-step" id="step-quiz">Quiz</div>
+  <div class="timeline-step" id="step-surprise">Surprise</div>
+  <div class="timeline-step" id="step-appreciation">Appreciation</div>
+  <div class="timeline-step" id="step-goodbye">Goodbye</div>
+</div>
+
+
+
+  <canvas id="heartCanvas"></canvas>
+  <audio id="bg-music" loop>
+  <source src="assets/august.mp3" type="audio/mpeg" />
+  </audio>
+
+  
+  <!-- Landing Page -->
+  <div class="page active" id="landing">
+    <h1 style="animation: bounceIn 1s ease-out;">🎉 It's a Special Day! 🎉</h1>
+    <p style="margin-top:10px;">Tap to unwrap some love 💖</p>
+    <button onclick="nextPage('intro')">Click to Begin</button>
+  </div>
+
+  <!-- Intro Page -->
+  <!-- Redesigned Intro Page -->
+<div class="page" id="intro">
+  <div class="intro-card">
+    <h2 class="intro-title">Happy Birthday, Utkalika! 💖</h2>
+    <p class="intro-subtitle">From your little chaos — Rishab</p>
+    <button class="intro-btn" onclick="nextPage('slideshow')">See Our Moments</button>
+  </div>
+</div>
+
+
+<!-- Slideshow Page -->
+<!-- 📸 Moments Page - Redesigned -->
+<div class="page" id="slideshow">
+  <div class="moments-container">
+    <h2>Our Timeless Moments <span class="heart-divider">💖</span></h2>
+    
+    <div class="polaroid-slideshow">
+      <div class="slideshow-controls">
+        <button class="nav-btn heart-btn left" onclick="prevSlide()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="media-frame">
+          <div class="polaroid">
+            <div class="polaroid-inner">
+              <img id="slide-img" class="moment-photo" />
+              <video id="slide-video" class="moment-video" controls hidden></video>
+              <div class="polaroid-tape"></div>
+            </div>
+            <p id="slide-caption" class="polaroid-caption"></p>
+          </div>
+        </div>
+        
+        <button class="nav-btn heart-btn right" onclick="nextSlide()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      
+      <div class="slideshow-progress">
+        <div class="progress-dots"></div>
+      </div>
+    </div>
+  </div>
+  
+  <button class="next-section-btn" onclick="nextPage('loveNotes')">
+    Continue to Love Notes <i class="fas fa-arrow-right"></i>
+  </button>
+</div>
+
+  <!-- Love Notes Page -->
+<div class="page" id="loveNotes"> 
+  <h2>💌 Love Notes</h2> 
+  <div class="quote-card pink"><p class="quote">"Can I go where you go?"</p> <span class="author">— Lover</span> </div> 
+  <div class="quote-card blue"> <p class="quote">You turned grey skies into ‘Daylight’</p> <span class="author">— Daylight</span> 
+  </div> <div class="quote-card violet"> <p class="quote">You’re the song I didn’t know I was humming all along.</p> <span class="author">— Rishab</span> </div>
+  <button onclick="nextPage('letters')">Read Letters</button>
+</div>
+
+<div class="page" id="letters">
+  <h2>📬 Personal Letters</h2>
+  <div class="letter-container">
+    <div class="envelope" onclick="openLetter('letter1')">
+      <img src="assets/envelope.png" class="envelope-icon" />
+      <div class="click-hint">Click to open 💌</div>
+    </div>
+    <div class="envelope" onclick="openLetter('letter2')">
+      <img src="assets/envelope.png" class="envelope-icon" />
+      <div class="click-hint">Click to open 💌</div>
+    </div>
+    <div class="envelope" onclick="openLetter('letter3')">
+      <img src="assets/envelope.png" class="envelope-icon" />
+      <div class="click-hint">Click to open 💌</div>
+    </div>
+  </div>
+
+  <!-- Pop-up Modals -->
+  <div class="letter-popup" id="letter1">
+    <div class="popup-content">
+      <span class="close" onclick="closeLetter('letter1')">&times;</span>
+      <p><strong>16th February, 2025</strong></p>
+        <p>
+          Lover Fest felt like a dream with you, but the most magical part was our moment — our own little 'Lover' moment.  
+          That tight hug, the warmth, the comfort — it didn’t feel like a first meeting; it felt like home.
+        </p>
+        <p>
+          Everything about you was just perfect — your kindness, your voice, your smile, your eyes — and then you showed up in my favorite color, stealing my heart effortlessly, like a lyric written just for me.
+        </p>
+        <p>
+          If time could pause, I’d choose that moment over and over again.  
+          Thank you so much, Ms. Beauty, for coming into my life!! 💖
+        </p>
+    </div>
+  </div>
+
+  <div class="letter-popup" id="letter2">
+    <div class="popup-content">
+      <span class="close" onclick="closeLetter('letter2')">&times;</span>
+      <p>To Utk, my little secret whispering magic,</p>
+        <p>
+          You walked into my life on a random February day,  
+          but since then, nothing’s felt random at all.
+        </p>
+        <p>
+          You’ve become my calm in chaos,  
+          the smile I search for in the noise,  
+          and the silence that feels full when you're near.
+        </p>
+        <p>
+          In your laughter, I’ve found music.  
+          In your voice, a sense of home.
+        </p>
+        <p>
+          Even our little fights… they carry warmth,  
+          because they end with us understanding each other even more.
+        </p>
+        <p>
+          You've seen me — the raw, messy, unfiltered me.  
+          And yet, you stayed.  
+          That means more to me than words can ever spell out.
+        </p>
+        <p>
+          With you, I’ve felt what it means to be alive.  
+          To be wanted.  
+          To be held — not just in arms, but in heart.
+        </p>
+        <p>
+          So here’s to you —  
+          The one who turned my ordinary into something quietly magical.
+        </p>
+        <p>Happy Birthday, Bebu ❣️</p>
+    </div>
+  </div>
+
+  <div class="letter-popup" id="letter3">
+    <div class="popup-content">
+      <span class="close" onclick="closeLetter('letter3')">&times;</span>
+      <p>
+          You’re chaotic, expressive, loving, annoying, sweet — and everything in between.  
+          You tease, you pout, you comfort, you demand.  
+          You ask for too many kisses and then complain when I give just one.
+        </p>
+        <p>
+          But most of all, you make me feel like I’m wanted.  
+          And that’s something rare.
+        </p>
+        <p>
+          From “Ms. Beauty” to “my safe place,”  
+          you’ve become this rhythm in my everyday life — the voice in my head that sounds like mischief and love.
+        </p>
+        <p>
+          We’re weird. We fight. We vibe.  
+          We forgive. We repeat.  
+          And that loop? Feels like home.
+        </p>
+        <p>
+          I won’t say future, forever, or always.  
+          I’ll just say — right now, you’ve made my world softer.  
+          And that’s enough to write a love song about 💛
+        </p>
+    </div>
+  </div>
+
+  <button onclick="nextPage('quiz')">Quiz Time</button>
+</div>
+
+
+
+<!-- 💡 Modern Quiz Page -->
+<div class="page" id="quiz">
+  <div class="quiz-card glass">
+    <h2 class="quiz-heading">How Well Do You Remember?</h2>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="quizProgressBar"></div>
+    </div>
+    <p class="question-counter" id="question-counter">Question 1 of 5</p>
+
+    <div id="quiz-box" class="quiz-box">
+      <p id="question-text" class="quiz-question"></p>
+      <div id="options" class="quiz-options"></div>
+      <p id="feedback" class="quiz-feedback"></p>
+    </div>
+
+    <div id="quiz-end" class="quiz-end" style="display:none;">
+      <h3 class="score-title">You scored <span id="final-score"></span>/5 💖</h3>
+      <p id="reward-message" class="reward-message"></p>
+      <div id="reward-gift" class="reward-gift"></div>
+      <button id="claimBtn" onclick="nextPage('surprise-prompt')" class="primary-btn">Click to Claim 🎉</button>
+      <div id="confetti" class="confetti-container"></div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Surprise Prompt Page --> 
+ <!-- 🎁 Redesigned Surprise Prompt Page -->
+<div class="page" id="surprise-prompt">
+  <div class="surprise-card glass">
+    <h2 class="section-title">Are you ready for a Surprise??</h2>
+
+    <div class="surprise-buttons">
+      <button class="yes-btn" onclick="loadSurprise()">Yes</button>
+      <button class="no-btn" onclick="showGlitchPopup()">No</button>
+    </div>
+
+    <p id="loading-text" class="loading-text" style="display: none;">✨ Surprise loading... Please wait ✨</p>
+  </div>
+
+  <!-- Glitch Popup -->
+  <div id="glitch-popup" class="glitch-popup">
+    <div class="glitch-popup-content">
+      <span class="close-glitch" onclick="closeGlitchPopup()">&times;</span>
+      <p>Oops! Seems like there's a technical glitch here,<br> Please click on the 'Yes' button.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 🌈 Restructured Surprise Page (Same Theme) -->
+<div class="page" id="surprise">
+  <!-- Header Section -->
+  <div class="surprise-header">
+    <h2>🎁 Your Surprise Awaits!</h2>
+    <p class="subtext">"You're my, my, my, my lover..."</p>
+  </div>
+
+  <!-- Media Grid Layout -->
+  <div class="surprise-grid">
+    <!-- Left Column - Photos -->
+    <div class="photo-column">
+      <div class="photo-frame" onclick="openImageModal('assets/photo1.jpg')">
+        <img src="assets/photo1.jpg" alt="Our moment" loading="lazy" decoding="async">
+      </div>
+      <div class="photo-frame" onclick="openImageModal('assets/photo2.jpg')">
+        <img src="assets/photo2.jpg" alt="Together" loading="lazy" decoding="async">
+      </div>
+      <div class="photo-frame" onclick="openImageModal('assets/photo4.jpg')">
+        <img src="assets/photo4.jpg" alt="Us" loading="lazy" decoding="async">
+      </div>
+    </div>
+
+    <!-- Center Column - Video -->
+    <div class="video-column">
+      <div class="video-wrapper">
+  <video id="surprise-video" controls playsinline preload="metadata" crossorigin="anonymous">
+          <source src="assets/birthday_surprise.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Right Column - Photos -->
+    <div class="photo-column">
+      <div class="photo-frame" onclick="openImageModal('assets/photo3.jpg')">
+        <img src="assets/photo3.jpg" alt="Memories" loading="lazy" decoding="async">
+      </div>
+      <div class="photo-frame" onclick="openImageModal('assets/photo5.jpg')">
+        <img src="assets/photo5.jpg" alt="Us" loading="lazy" decoding="async">
+      </div>
+      <div class="photo-frame" onclick="openImageModal('assets/photo6.jpg')">
+        <img src="assets/photo6.jpg" alt="Us" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="surprise-actions">
+    <button onclick="replayVideo()" class="lover-btn">
+      <span>Replay</span>
+    </button>
+    <button onclick="nextPage('appreciation')" class="lover-btn">
+      <span>Continue</span>
+    </button>
+  </div>
+<!-- Floating Elements -->
+  <div class="floating-hearts"></div>
+  <div class="hearts"></div>
+  <div class="floating-lyrics">"Can I go where you go?"</div>
+</div>
+
+<!-- Appreciation Page --> 
+<div class="page" id="appreciation"> <div class="appreciation-message"> 
+    <h2>🎁 A Thoughtful Gift 🎁</h2> 
+    <p> Wanted to make your day truly special this year - with smiles from some of the most adorable little souls </p> 
+    <p> Every blessing counts... </p> 
+    <p> Hope you like this small token of love from me with the help of <strong>Homeless Care Foundation</strong>. </p> 
+    <p> Not everyone is so privileged as we are, so I thought - why not make your special day their special day too ♥ </p> 
+    <p> Wishing you the <strong>Happiest 23rd Birthday</strong> from me and these beautiful brothers and sisters who send their love and prayers your way 🎉 </p> 
+    <h3>#Happiest23birthdayUtk</h3>
+<button onclick="nextPage('memory-map')">💖 Continue</button>
+</div> 
+</div>
+
+<!-- Insert this between your existing sections -->
+<div class="page" id="memory-map">
+  <section id="memory-map-section">
+    <h2>Our Journey Together</h2>
+    <p>"Every love story is beautiful, but ours is my favorite" 💕</p>
+    <div id="map"></div>
+  </section>
+  
+  <button class="next-btn" onclick="nextPage('goodbye')">Continue to Goodbye 💌</button>
+</div>
+
+
+
+<!-- Final Goodbye Page -->
+<div class="page" id="goodbye">
+  <h2>Thank You for Being You ✨</h2>
+  <div class="quote-box">
+    <p class="quote">"long live the memories we made"</p>
+    <p class="author">— Taylor Swift</p>
+  </div>
+  <br><br>
+
+  <div id="wish-section">
+    <h2>Your Wish/message to the Universe 💫</h2>
+    <form id="wishForm">
+      <textarea name="wish" placeholder="Type your wish here..." required></textarea><br>
+      <button type="submit">Send to the Universe ✨</button>
+      <p id="wishStatus"></p>
+    </form>
+  </div>
+
+  <!-- 🗝️ One Last Letter Prompt -->
+  <div class="final-letter-container">
+    <h3>💌 One Last Letter</h3>
+    <button class="replay-btn" onclick="openPasswordPrompt()">Click to Open</button>
+  </div>
+
+  <div id="passwordModal" class="letter-popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePasswordModal()">&times;</span>
+      <p>Enter your phone number to open the letter</p>
+      <input type="password" id="letterPassword" placeholder="Enter Password" />
+      <button onclick="verifyPassword()" class="primary-btn">Unlock Letter</button>
+      <p id="wrongPass" style="color: crimson; display: none;">Incorrect password 💔</p>
+    </div>
+  </div>
+
+  <div class="letter-popup" id="secretLetter">
+    <div class="popup-content">
+      <span class="close" onclick="closeLetter('secretLetter')">&times;</span>
+
+      <p>
+  Hey,
+</p>
+
+<p>
+  I know things haven’t been the same between us since we both went back home. 
+  I truly tried my best to keep our connection alive and be there for you in every way I could. 
+  I understand you didn’t always have the time, or maybe I couldn’t give you what you needed either.
+</p>
+<p>
+   I just want you to know one thing — I never had any bad intentions. I’ve always respected you deeply, and I still do. 
+   I never expected much in return… just a little effort, a small message, or a call to know you’re okay.
+</p>
+<p>
+  Maybe I’ll never fully understand what created this distance between us, but please know that for me, you’ll always remain very important. 
+  And no matter what, if you ever need me, I’ll always be just one call away.
+</p>
+
+<p>
+  No matter where life takes us, remember this: <br>
+  Someone out there smiles a little wider when they hear your name. 💖
+</p>
+
+<p>
+  Please take care of yourself and stay safe, especially in Bangalore. And yes… I love you — so much. 💖
+</p>
+
+    <p>
+      Forever a Swiftie by your side,<br>
+      — Rishab (Taylor's Version)
+    </p>
+    </div>
+  </div>
+</div>  
+  
+  <!-- Chatbot elements -->
+  <div class="chatbot-icon" onclick="toggleChat()">
+    <i class="fas fa-comment-dots"></i>
+  </div>
+
+  <div class="chatbot-container" id="chatbot">
+    <div class="chatbot-header">
+      <img src="assets/taylor.jpg" alt="Taylor Swift" class="profile-pic" />
+      <h3>Taylor Swift</h3>
+      <button class="chatbot-close" onclick="toggleChat()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+    </div>
+    <div class="chat-input">
+      <input type="text" id="user-input" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+      <button id="send-btn" onclick="sendMessage()">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+  
+
+  <script type="module" src="assets/script.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Image Modal Popup -->
+<div id="imageModal" class="image-modal">
+  <span class="close-modal" onclick="closeImageModal()">&times;</span>
+  <img class="modal-content" id="modalImage">
+</div>
+
+<!-- Add this AFTER your existing CSS links -->
+<link rel="stylesheet" href="assets/memory-map.css">
+
+<!-- Maps will be loaded lazily when entering the memory-map page -->
+<script type="module" src="assets/memory-map.js" defer></script>
+
+</body>
+</html>
