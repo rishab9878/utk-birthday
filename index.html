@@ -363,6 +363,7 @@
   <!-- 🗝️ One Last Letter Prompt -->
   <div class="final-letter-container">
     <h3>💌 One Last Letter</h3>
+    <p>(Modified)</p>
     <button class="replay-btn" onclick="openPasswordPrompt()">Click to Open</button>
   </div>
 
@@ -384,28 +385,50 @@
   Hey,
 </p>
 
+<p><strong>
+  I never thought I’d reach a point where expressing how I feel would hurt this much.</strong></p>
 <p>
-  I know things haven’t been the same between us since we both went back home. 
-  I truly tried my best to keep our connection alive and be there for you in every way I could. 
-  I understand you didn’t always have the time, or maybe I couldn’t give you what you needed either.
+   I gave everything I could to keep us alive — I begged, stayed patient, chased, and fought silently just to hold on to something that once made me feel the happiest. 
+   But somewhere along the way, I lost myself…
 </p>
 <p>
-   I just want you to know one thing — I never had any bad intentions. I’ve always respected you deeply, and I still do. 
-   I never expected much in return… just a little effort, a small message, or a call to know you’re okay.
-</p>
-<p>
-  Maybe I’ll never fully understand what created this distance between us, but please know that for me, you’ll always remain very important. 
-  And no matter what, if you ever need me, I’ll always be just one call away.
+  I know you were going through your own struggles. You weren’t in the best mental space, and you said you didn’t have time. And honestly, I was happy whenever you did call, even if it was just for a moment. But deep down, I felt disrespected. I was showing up with effort and care, but it felt like I was being taken for granted. No one is ever too busy to send a two-second reply. And I found myself asking for the bare minimum — just basic human decency — and even that felt like too much for you.
+I get being busy... but not forgetting. Not silence. Not making someone feel invisible. You used to care. You used to talk to me like I meant something. Now, I’m just... here. Waiting for replies that never come. Wondering what I did wrong. 
 </p>
 
 <p>
-  No matter where life takes us, remember this: <br>
-  Someone out there smiles a little wider when they hear your name. 💖
+  I never asked for grand gestures. I didn’t even want constant attention. 
+  But going days, even weeks, without a single message? Not even a ten-second check-in? 
+  That silence said more than any words ever could.
 </p>
 
 <p>
-  Please take care of yourself and stay safe, especially in Bangalore. And yes… I love you — so much. 💖
+  I still keep my phone next to me while sleeping hoping that your name would pop up, 
+  still wait for your good morning texts/calls but they never came. 
 </p>
+
+ <p>
+  When you went back home, I stayed here hoping, praying, wishing that everything would be okay for your family. 
+  And every time you called — scared, anxious, or lonely — I was there. 
+  No matter where I was, I picked up. I supported you in every way I could. 
+  But looking back now… I think I was wrong. 
+  It felt like once things started getting better on your end, you slowly began drifting away. 
+  And in the end… what happened? You moved on. 
+  While I was still hoping and praying for your family’s peace, you were already letting go of us.
+ </p>
+
+ <p> 
+  I never had bad intentions. I never wished anything wrong for you — not even for a second. But I honestly didn’t think it would end like this. Not with you. Not like this.<br>
+  Lately, I’ve been taking therapy. I needed it — because holding in all of this pain was starting to break me from the inside and giving me panic attacks. It got so intense that I couldn’t sleep at night, appetite became worse and the worst thing , I got rude to everyone around me. And slowly, I’m trying to heal, trying to understand, trying to breathe again. But some wounds… they take time.
+ </p>
+
+ <p><strong>
+  Take care of yourself. And yes, don’t overthink too much. I genuinely want you to stay happy. Just… next time, please learn to respect someone who truly cares about you and worries for you. And please, stay aware of people around you in Bangalore — especially the men.
+  And yes... I still love you. Maybe not in the same way, not with the same hope — but with the part of me that once believed in us. This is the last time I’ll say it… and I mean it. 
+  If I knew that the airport hug will be our last hug, I’d have hugged you for little longer. 
+  Thank you for all the good memories. I’ll cherish them forever.
+  Goodbye — and I hope life treats you kindly.
+ </strong></p>
 
     <p>
       Forever a Swiftie by your side,<br>
@@ -424,9 +447,14 @@
     <div class="chatbot-header">
       <img src="assets/taylor.jpg" alt="Taylor Swift" class="profile-pic" />
       <h3>Taylor Swift</h3>
-      <button class="chatbot-close" onclick="toggleChat()">
-        <i class="fas fa-times"></i>
-      </button>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="chatbot-clear" onclick="clearChatStorage()" title="Clear chat history">
+          <i class="fas fa-trash"></i>
+        </button>
+        <button class="chatbot-close" onclick="toggleChat()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
     </div>
     <div class="chat-messages" id="chat-messages">
     </div>
