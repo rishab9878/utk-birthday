@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Chat — Reply to users (Rishab)</title>
+  <style>
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:0;background:#f7f7fb;color:#222}
+    .app{max-width:900px;margin:28px auto;padding:18px}
+    header{display:flex;align-items:center;justify-content:space-between}
+    h1{font-size:18px;margin:0}
+    .grid{display:grid;grid-template-columns:320px 1fr;gap:14px;margin-top:16px}
+    .panel{background:white;border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(10,10,20,0.06)}
+    #sessions{height:520px;overflow:auto}
+    .session-row{padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #f0f0f4;cursor:pointer}
+    .session-row.active{border-color:#ff80c7;background:linear-gradient(90deg,#fff0f6,#fff)}
+    #chat{display:flex;flex-direction:column;height:520px}
+    #messages{flex:1;overflow:auto;padding:8px;border-radius:8px;background:#fafafa}
+    .msg{margin-bottom:8px;font-size:14px}
+    .msg .who{font-weight:700;margin-right:6px}
+    .controls{display:flex;gap:8px;margin-top:8px}
+    input[type=text]{flex:1;padding:10px;border-radius:8px;border:1px solid #eee}
+    button{background:#ff7ab1;color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
+    small.note{color:#666}
+    footer{margin-top:12px;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Admin chat — Reply to users</h1>
+      <div>
+        <small class="note">Replace FIREBASE_CONFIG below, host this page, open with your browser.</small>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="panel">
+        <h3>Open support requests</h3>
+        <div id="sessions">Loading…</div>
+        <div style="margin-top:8px"><button id="refreshSessions">Refresh</button></div>
+      </div>
+
+      <div class="panel" id="chat">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <strong id="sessionTitle">No session selected</strong>
+          <small id="sessionMeta"></small>
+        </div>
+        <div id="messages">Select a session to view messages</div>
+        <div class="controls">
+          <input id="replyInput" type="text" placeholder="Type your reply..." />
+          <button id="sendBtn">Send</button>
+        </div>
+        <footer>
+          <small class="note">Messages are written to Firebase Realtime DB under <code>conversations/{sessionId}</code>. Use secure DB rules in production.</small>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+  <script>
+    // Replace with your Firebase project config
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyAEbqZxgXzjrqt3W9vhLCmn4_eHJkZKPEc",
+      authDomain: "chatbox-703fd.firebaseapp.com",
+      projectId: "chatbox-703fd",
+      storageBucket: "chatbox-703fd.firebasestorage.app",
+      messagingSenderId: "763623684913",
+      appId: "1:763623684913:web:037e07912f5e6fbedc0e10",
+      measurementId: "G-N9KK5PF8NH"
+    };
+
+    if (FIREBASE_CONFIG.apiKey.startsWith('REPLACE')) {
+      document.getElementById('sessions').innerText = 'Please edit this file and add your Firebase config.';
+      console.warn('Firebase config not set in admin.html');
+    }
+
+    firebase.initializeApp(FIREBASE_CONFIG);
+    const db = firebase.database();
+
+    const sessionsEl = document.getElementById('sessions');
+    const messagesEl = document.getElementById('messages');
+    const sendBtn = document.getElementById('sendBtn');
+    const replyInput = document.getElementById('replyInput');
+    const sessionTitle = document.getElementById('sessionTitle');
+    const sessionMeta = document.getElementById('sessionMeta');
+
+    let currentSessionId = new URLSearchParams(location.search).get('session') || null;
+    let sessionsRef = db.ref('support_requests');
+    let convRef = null;
+
+    function formatTime(ts){if(!ts) return ''; const d=new Date(ts); return d.toLocaleString();}
+
+    function loadSessions(){
+      sessionsEl.innerHTML = 'Loading...';
+      sessionsRef.orderByChild('createdAt').limitToLast(50).once('value', snap => {
+        const v = snap.val() || {};
+        const items = Object.values(v).sort((a,b)=>b.createdAt-a.createdAt);
+        sessionsEl.innerHTML = '';
+        if (items.length===0) { sessionsEl.innerText = 'No open requests'; return; }
+        items.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'session-row' + (item.sessionId===currentSessionId? ' active':'');
+          div.innerHTML = `<div><strong>${item.sessionId}</strong></div><div><small>at ${formatTime(item.createdAt)}</small></div>`;
+          div.onclick = ()=> selectSession(item.sessionId);
+          sessionsEl.appendChild(div);
+        });
+      });
+    }
+
+    function selectSession(id){
+      currentSessionId = id;
+      sessionTitle.innerText = 'Session: ' + id;
+      sessionMeta.innerText = '';
+      // highlight
+      Array.from(document.querySelectorAll('.session-row')).forEach(r=>r.classList.toggle('active', r.textContent.includes(id)));
+      if (convRef) convRef.off();
+      messagesEl.innerHTML = 'Connecting...';
+      convRef = db.ref('conversations/' + id);
+      convRef.on('child_added', snap=>{
+        const m = snap.val();
+        appendMessage(m.from, m.text, m.ts);
+      });
+      // mark support_request as answered flag
+      db.ref('support_requests/' + id + '/status').set('viewed');
+    }
+
+    function appendMessage(who, text, ts){
+      const d = document.createElement('div'); d.className='msg';
+      const whoSpan = document.createElement('span'); whoSpan.className='who'; whoSpan.innerText = who;
+      const textSpan = document.createElement('span'); textSpan.innerText = ' ' + (text||'');
+      const time = document.createElement('div'); time.style.fontSize='11px'; time.style.color='#666'; time.innerText = formatTime(ts);
+      d.appendChild(whoSpan); d.appendChild(textSpan); d.appendChild(time);
+      messagesEl.appendChild(d); messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function sendOwnerMessage(){
+      const txt = replyInput.value.trim(); if(!txt || !currentSessionId) return;
+      const entry = { from: 'owner', text: txt, ts: Date.now() };
+      db.ref('conversations/' + currentSessionId).push(entry).then(()=>{
+        replyInput.value = ''; appendMessage('you', txt, entry.ts);
+        // Optionally mark request as answered and set lastReply
+        db.ref('support_requests/' + currentSessionId + '/status').set('answered');
+        db.ref('support_requests/' + currentSessionId + '/lastReply').set(entry.ts);
+      }).catch(e=>console.error(e));
+    }
+
+    sendBtn.onclick = sendOwnerMessage;
+    replyInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendOwnerMessage(); });
+
+    document.getElementById('refreshSessions').onclick = loadSessions;
+
+    // If a session id is present in query, auto-select it
+    if (currentSessionId) {
+      loadSessions();
+      setTimeout(()=> selectSession(currentSessionId), 600);
+    } else {
+      loadSessions();
+    }
+
+    // Simple live update: watch for new support requests and prepend
+    sessionsRef.limitToLast(1).on('child_added', snap=>{ loadSessions(); });
+  </script>
+</body>
+</html>
