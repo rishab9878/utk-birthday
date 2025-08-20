@@ -575,6 +575,7 @@ function closeImageModal() {
 }
 
 let waitingForRishabMessage = false; // State variable for chatbot
+let waitingForMessageConfirmation = false; // State variable for "yes" confirmation
 
 // Enhanced surprise page animations
 function initSurpriseAnimations() {
@@ -752,12 +753,8 @@ function toggleChat() {
 function displayBotMessages() {
   const messages = [
     "Heyy Utk! It's me Taylor",
-    "Hope you loved this little surprise! But guess what? This isn't the end",
-    "A Super cute gift hamper tay-lored especially for you is already on its way to your address",
-    "They will be delivered in 2 shipments...out of which one hamper you will receive today through Porter",
-    "The other one will be delivered by Delhivery",
-    "Tracking ID: <span style='color:#ff87ab;font-weight:600'>2827769099972</span>", // Themed color
-    "Rishab wants you to open the gift hamper, not anyone else"
+    "Hope you loved this little surprise!",
+    "Also the gift hamper tay-lored especially by me. I hope you liked it",
   ];
 
   const chatMessages = DOMCache.get('chat-messages');
